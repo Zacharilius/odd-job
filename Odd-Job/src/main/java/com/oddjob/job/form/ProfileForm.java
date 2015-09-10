@@ -14,6 +14,16 @@ public class ProfileForm {
      */
     private TeeShirtSize teeShirtSize;
 
+    /**
+     * profile user's city
+     */
+    private String city;
+    
+    /**
+     * Profile user's state
+     */
+    private String state;
+    
     private ProfileForm () {}
 
     /**

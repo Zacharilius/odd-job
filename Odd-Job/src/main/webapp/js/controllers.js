@@ -1,11 +1,11 @@
 'use strict';
 
 /**
- * The root conferenceApp module.
+ * The root oddjobApp module.
  *
- * @type {conferenceApp|*|{}}
+ * @type {oddjobApp|*|{}}
  */
-var conferenceApp = conferenceApp || {};
+var oddjobApp = oddjobApp || {};
 
 /**
  * @ngdoc module
@@ -15,7 +15,7 @@ var conferenceApp = conferenceApp || {};
  * Angular module for controllers.
  *
  */
-conferenceApp.controllers = angular.module('conferenceControllers', ['ui.bootstrap']);
+oddjobApp.controllers = angular.module('conferenceControllers', ['ui.bootstrap']);
 
 /**
  * @ngdoc controller
@@ -24,7 +24,7 @@ conferenceApp.controllers = angular.module('conferenceControllers', ['ui.bootstr
  * @description
  * A controller used for the My Profile page.
  */
-conferenceApp.controllers.controller('MyProfileCtrl',
+oddjobApp.controllers.controller('MyProfileCtrl',
     function ($scope, $log, oauth2Provider, HTTP_ERRORS) {
         $scope.submitted = false;
         $scope.loading = false;
@@ -128,7 +128,7 @@ conferenceApp.controllers.controller('MyProfileCtrl',
  * @description
  * A controller used for the Create conferences page.
  */
-conferenceApp.controllers.controller('CreateConferenceCtrl',
+oddjobApp.controllers.controller('CreateConferenceCtrl',
     function ($scope, $log, oauth2Provider, HTTP_ERRORS) {
 
         /**
@@ -243,7 +243,7 @@ conferenceApp.controllers.controller('CreateConferenceCtrl',
  * @description
  * A controller used for the Show conferences page.
  */
-conferenceApp.controllers.controller('ShowConferenceCtrl', function ($scope, $log, oauth2Provider, HTTP_ERRORS) {
+oddjobApp.controllers.controller('ShowConferenceCtrl', function ($scope, $log, oauth2Provider, HTTP_ERRORS) {
 
     /**
      * Holds the status if the query is being executed.
@@ -541,7 +541,7 @@ conferenceApp.controllers.controller('ShowConferenceCtrl', function ($scope, $lo
  * @description
  * A controller used for the conference detail page.
  */
-conferenceApp.controllers.controller('ConferenceDetailCtrl', function ($scope, $log, $routeParams, HTTP_ERRORS) {
+oddjobApp.controllers.controller('ConferenceDetailCtrl', function ($scope, $log, $routeParams, HTTP_ERRORS) {
     $scope.conference = {};
 
     $scope.isUserAttending = false;
@@ -685,7 +685,7 @@ conferenceApp.controllers.controller('ConferenceDetailCtrl', function ($scope, $
  * such as user authentications.
  *
  */
-conferenceApp.controllers.controller('RootCtrl', function ($scope, $location, oauth2Provider) {
+oddjobApp.controllers.controller('RootCtrl', function ($scope, $location, oauth2Provider) {
 
     /**
      * Returns if the viewLocation is the currently viewed page.
@@ -771,7 +771,7 @@ conferenceApp.controllers.controller('RootCtrl', function ($scope, $location, oa
  * The controller for the modal dialog that is shown when an user needs to login to achive some functions.
  *
  */
-conferenceApp.controllers.controller('OAuth2LoginModalCtrl',
+oddjobApp.controllers.controller('OAuth2LoginModalCtrl',
     function ($scope, $modalInstance, $rootScope, oauth2Provider) {
         $scope.singInViaModal = function () {
             oauth2Provider.signIn(function () {
@@ -795,7 +795,7 @@ conferenceApp.controllers.controller('OAuth2LoginModalCtrl',
  * @description
  * A controller that holds properties for a datepicker.
  */
-conferenceApp.controllers.controller('DatepickerCtrl', function ($scope) {
+oddjobApp.controllers.controller('DatepickerCtrl', function ($scope) {
     $scope.today = function () {
         $scope.dt = new Date();
     };
@@ -829,3 +829,160 @@ conferenceApp.controllers.controller('DatepickerCtrl', function ($scope) {
     $scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'shortDate'];
     $scope.format = $scope.formats[0];
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+ * @ngdoc controller
+ * @name JobCtrl
+ *
+ * @description
+ * A controller used for the Post jobs page.
+ */
+oddjobApp.controllers.controller('JobCtrl',
+    function ($scope, $log, oauth2Provider, HTTP_ERRORS) {
+
+        /**
+         * The conference object being edited in the page.
+         * @type {{}|*}
+         */
+        $scope.job = $scope.job || {};
+
+        /**
+         * Holds the default values for the input candidates for city select.
+         * @type {string[]}
+         */
+        $scope.cities = [
+            'Seattle',
+            'Redmond',
+            'Bellevue',
+            'Clyde HIll',
+            'Issaquah',
+            'Medina',
+            'Mercer Island',
+            'Newcastle',
+            'Sammamish',
+            'Woodinville',
+            'Bothell',
+            'Edmonds',
+            'Kenmore',
+            'Lake Forest Park',
+            'Shoreline',
+            'Kirkland',
+            'Renton'
+        ];
+        
+        $scope.states = [
+                         'Washington'
+        ];
+
+        /**
+         * Holds the default values for the input candidates for tags select.
+         * @type {string[]}
+         */
+        $scope.tags = [
+            'Construction',
+            'Moving Help',
+            'Web Development',
+            'Sign Holding',
+            'Lawn Mowing',
+            'Pet Sitting',
+            'Something Else'
+        ];
+
+
+        /**
+         * Tests if the conference.startDate and conference.endDate are valid.
+         * @returns {boolean} true if the dates are valid, false otherwise.
+         */
+        $scope.isValidDates = function () {
+        	var date = new Date();
+            if (!$scope.job.completionDate) {
+                return true;
+            }
+
+            return date <= $scope.job.endDate;
+        }
+
+        /**
+         * Tests if $scope.conference is valid.
+         * @param conferenceForm the form object from the create_conferences.html page.
+         * @returns {boolean|*} true if valid, false otherwise.
+         */
+        $scope.isValidJob = function (jobForm) {
+            return !jobForm.$invalid &&
+                $scope.isValidDates();
+        }
+
+        /**
+         * Invokes the conference.createConference API.
+         *
+         * @param conferenceForm the form object.
+         */
+        $scope.createJob = function (jobForm) {
+            if (!$scope.isValidJOb(jobForm)) {
+                return;
+            }
+
+            $scope.loading = true;
+            gapi.client.conference.createJob($scope.job).
+                execute(function (resp) {
+                    $scope.$apply(function () {
+                        $scope.loading = false;
+                        if (resp.error) {
+                            // The request has failed.
+                            var errorMessage = resp.error.message || '';
+                            $scope.messages = 'Failed to create a job : ' + errorMessage;
+                            $scope.alertStatus = 'warning';
+                            $log.error($scope.messages + ' JOb : ' + JSON.stringify($scope.job));
+
+                            if (resp.code && resp.code == HTTP_ERRORS.UNAUTHORIZED) {
+                                oauth2Provider.showLoginModal();
+                                return;
+                            }
+                        } else {
+                            // The request has succeeded.
+                            $scope.messages = 'The job has been created : ' + resp.result.title;
+                            $scope.alertStatus = 'success';
+                            $scope.submitted = false;
+                            $scope.job = {};
+                            $log.info($scope.messages + ' : ' + JSON.stringify(resp.result));
+                        }
+                    });
+                });
+        };
+    });

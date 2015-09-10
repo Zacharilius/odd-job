@@ -16,6 +16,8 @@ import com.oddjob.job.form.ProfileForm.TeeShirtSize;
 public class Profile {
     String displayName;
     String mainEmail;
+    String city;
+    String state;
     TeeShirtSize teeShirtSize;
     
     private List<String> conferenceKeysToAttend = new ArrayList<>(0);

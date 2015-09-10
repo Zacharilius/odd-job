@@ -32,6 +32,10 @@ var app = angular.module('oddjobApp',
                     templateUrl: '/partials/profile.html',
                     controller: 'MyProfileCtrl'
                 }).
+                when('/job/create', {
+                    templateUrl: '/partials/post_job.html',
+                    controller: 'JobCtrl'
+                }).
                 when('/', {
                     templateUrl: '/partials/home.html'
                 }).

@@ -41,7 +41,7 @@ import com.oddjob.job.form.ProfileForm.TeeShirtSize;
  * Defines conference APIs.
  */
 @Api(name = "conference", version = "v1", scopes = { Constants.EMAIL_SCOPE }, clientIds = {
-        Constants.WEB_CLIENT_ID, Constants.API_EXPLORER_CLIENT_ID }, description = "API for the Conference Central Backend application.")
+        Constants.WEB_CLIENT_ID, Constants.API_EXPLORER_CLIENT_ID }, description = "API for the Odd-Job  Backend application.")
 public class ConferenceApi {
 
     /*
@@ -69,25 +69,19 @@ public class ConferenceApi {
     @ApiMethod(name = "saveProfile", path = "profile", httpMethod = HttpMethod.POST)
     // The request that invokes this method should provide data that
     // conforms to the fields defined in ProfileForm
-    // TODO 1 Pass the ProfileForm parameter
-    // TODO 2 Pass the User parameter
     public Profile saveProfile(final User user, ProfileForm profileForm)
             throws UnauthorizedException {
 
-        // TODO 2
         // If the user is not logged in, throw an UnauthorizedException
         if (user == null) {
             throw new UnauthorizedException("Authorization required");
         }
 
-        // TODO 2
         // Get the userId and mainEmail
         String mainEmail = user.getEmail();
         String userId = user.getUserId();
 
-        // TODO 1
         // Get the displayName and teeShirtSize sent by the request.
-
         String displayName = profileForm.getDisplayName();
         TeeShirtSize teeShirtSize = profileForm.getTeeShirtSize();
 
@@ -114,7 +108,6 @@ public class ConferenceApi {
             profile.update(displayName, teeShirtSize);
         }
 
-        // TODO 3
         // Save the entity in the datastore
         ofy().save().entity(profile).now();
 
