@@ -4,6 +4,7 @@ import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyFactory;
 import com.googlecode.objectify.ObjectifyService;
 import com.oddjob.job.domain.Conference;
+import com.oddjob.job.domain.Job;
 import com.oddjob.job.domain.Profile;
 import com.oddjob.job.domain.Session;
 
@@ -19,6 +20,7 @@ public class OfyService {
         factory().register(Profile.class);
         factory().register(Conference.class);
         factory().register(Session.class);
+        factory().register(Job.class);
     }
 
     /**

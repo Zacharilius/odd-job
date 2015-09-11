@@ -1,12 +1,12 @@
 package com.oddjob.job.domain;
 
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 import com.google.api.server.spi.config.AnnotationBoolean;
 import com.google.api.server.spi.config.ApiResourceProperty;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableList;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Cache;
 import com.googlecode.objectify.annotation.Entity;
@@ -66,19 +66,20 @@ public class Job {
      * Hours for job
      */
     @Index
-    private double jobHours;
+    private double hours;
     
     /**
      * Job pay
      */
     @Index
-    private double jobPay;
+    private double pay;
     
     /**
      * Needs completed by date
      */
     @Index
     private Date completionDate;
+    
     /**
      * Just making the default constructor private.
      */
@@ -91,11 +92,14 @@ public class Job {
      * @param jobForm
      */
     public Job(final long id, final String posterUserId,final JobForm jobForm) {
+    	System.out.println(jobForm.getTitle());
+    	System.out.println(jobForm.getDescription());
         Preconditions.checkNotNull(jobForm.getTitle(), "The title is required");
-        Preconditions.checkNotNull(jobForm.getDescription(), "The title is required");
+        Preconditions.checkNotNull(jobForm.getDescription(), "The description is required");
         this.id = id;
         this.profileKey = Key.create(Profile.class, posterUserId);
         this.posterUserId = posterUserId;
+        this.postDate = new Date();
         updateJobForm(jobForm);
     }
     /**
@@ -105,8 +109,8 @@ public class Job {
 	private void updateJobForm(JobForm jobForm) {
 		this.title = jobForm.getTitle();
 		this.description = jobForm.getDescription();
-		this.jobHours = jobForm.getJobHours();
-		this.jobPay = jobForm.getJobPay();
+		this.hours = jobForm.getHours();
+		this.pay = jobForm.getPay();
 		
 		// If the user supplied a complete by date. Convert it into date format.
         Date completionDate = jobForm.getCompletionDate();
@@ -156,7 +160,7 @@ public class Job {
 	 * @return the tags
 	 */
 	public List<String> getTags() {
-		return tags;
+		return tags == null ? null : ImmutableList.copyOf(tags);
 	}
 
 	/**
@@ -170,14 +174,14 @@ public class Job {
 	 * @return the jobHours
 	 */
 	public double getJobHours() {
-		return jobHours;
+		return hours;
 	}
 
 	/**
 	 * @return the jobPay
 	 */
 	public double getJobPay() {
-		return jobPay;
+		return pay;
 	}
 
 	/**
@@ -186,76 +190,5 @@ public class Job {
 	public Date getCompletionDate() {
 		return completionDate;
 	}
-
-	/**
-	 * @param id the id to set
-	 */
-	public void setId(long id) {
-		this.id = id;
-	}
-
-	/**
-	 * @param title the title to set
-	 */
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
-	/**
-	 * @param description the description to set
-	 */
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	/**
-	 * @param profileKey the profileKey to set
-	 */
-	public void setProfileKey(Key<Profile> profileKey) {
-		this.profileKey = profileKey;
-	}
-
-	/**
-	 * @param posterUserId the posterUserId to set
-	 */
-	public void setPosterUserId(String posterUserId) {
-		this.posterUserId = posterUserId;
-	}
-
-	/**
-	 * @param tags the tags to set
-	 */
-	public void setTags(List<String> tags) {
-		this.tags = tags;
-	}
-
-	/**
-	 * @param postDate the postDate to set
-	 */
-	public void setPostDate(Date postDate) {
-		this.postDate = postDate;
-	}
-
-	/**
-	 * @param jobHours the jobHours to set
-	 */
-	public void setJobHours(double jobHours) {
-		this.jobHours = jobHours;
-	}
-
-	/**
-	 * @param jobPay the jobPay to set
-	 */
-	public void setJobPay(double jobPay) {
-		this.jobPay = jobPay;
-	}
-
-	/**
-	 * @param completionDate the completionDate to set
-	 */
-	public void setCompletionDate(Date completionDate) {
-		this.completionDate = completionDate;
-	}
-
 	
 }

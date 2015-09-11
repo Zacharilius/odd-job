@@ -28,10 +28,12 @@ import com.googlecode.objectify.cmd.Query;
 import com.oddjob.job.Constants;
 import com.oddjob.job.domain.Announcement;
 import com.oddjob.job.domain.Conference;
+import com.oddjob.job.domain.Job;
 import com.oddjob.job.domain.Profile;
 import com.oddjob.job.domain.Session;
 import com.oddjob.job.form.ConferenceForm;
 import com.oddjob.job.form.ConferenceQueryForm;
+import com.oddjob.job.form.JobForm;
 import com.oddjob.job.form.ProfileForm;
 import com.oddjob.job.form.SessionForm;
 import com.oddjob.job.form.SessionQueryForm;
@@ -860,5 +862,83 @@ public Announcement getFeaturedSpeaker(){
 		return new Announcement(message.toString());
 	}
 	return null;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+ * Creates a new Job object and stores it to the datastore.
+ *
+ * @param user A user who invokes this method, null when the user is not signed in.
+ * @param jobForm A JobForm object representing user's inputs.
+ * @return A newly created Job Object.
+ * @throws UnauthorizedException when the user is not signed in.
+ */
+@ApiMethod(name = "createJob", path = "job", httpMethod = HttpMethod.POST)
+public Job createJob(final User user, final JobForm jobForm)
+    throws UnauthorizedException {
+    if (user == null) {
+        throw new UnauthorizedException("Authorization required");
+    }
+    final String userId = user.getUserId();
+    Key<Profile> profileKey = Key.create(Profile.class, userId);
+    final Key<Job> jobKey = factory().allocateId(profileKey, Job.class);
+    final long jobId = jobKey.getId();
+    final Queue queue = QueueFactory.getDefaultQueue();
+    
+    // Start transactions
+    Job job = ofy().transact(new Work<Job>(){
+    	@Override
+    	public Job run(){
+            Profile profile = getProfileFromUser(user);
+    		Job job = new Job(jobId, userId, jobForm);
+            ofy().save().entities(profile, job).now();
+            /*
+            queue.add(ofy().getTransaction(),
+            		TaskOptions.Builder.withUrl("/tasks/send_confirmation_email")
+            		.param("email",  profile.getMainEmail())
+            		.param("conferenceInfo", conference.toString()));
+            */
+            return job;
+    	}
+    }); 
+    return job;
 }
 }

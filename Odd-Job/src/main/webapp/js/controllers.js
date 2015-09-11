@@ -919,6 +919,7 @@ oddjobApp.controllers.controller('JobCtrl',
             'Moving Help',
             'Web Development',
             'Sign Holding',
+            'Cleaning',
             'Lawn Mowing',
             'Pet Sitting',
             'Something Else'
@@ -934,8 +935,7 @@ oddjobApp.controllers.controller('JobCtrl',
             if (!$scope.job.completionDate) {
                 return true;
             }
-
-            return date <= $scope.job.endDate;
+            return date.setHours(0,0,0,0) <= $scope.job.completionDate;
         }
 
         /**
@@ -944,6 +944,8 @@ oddjobApp.controllers.controller('JobCtrl',
          * @returns {boolean|*} true if valid, false otherwise.
          */
         $scope.isValidJob = function (jobForm) {
+        	console.log(!jobForm.$invalid);
+        	console.log($scope.isValidDates());
             return !jobForm.$invalid &&
                 $scope.isValidDates();
         }
@@ -954,7 +956,7 @@ oddjobApp.controllers.controller('JobCtrl',
          * @param conferenceForm the form object.
          */
         $scope.createJob = function (jobForm) {
-            if (!$scope.isValidJOb(jobForm)) {
+            if (!$scope.isValidJob(jobForm)) {
                 return;
             }
 
@@ -968,7 +970,7 @@ oddjobApp.controllers.controller('JobCtrl',
                             var errorMessage = resp.error.message || '';
                             $scope.messages = 'Failed to create a job : ' + errorMessage;
                             $scope.alertStatus = 'warning';
-                            $log.error($scope.messages + ' JOb : ' + JSON.stringify($scope.job));
+                            $log.error($scope.messages + ' Job : ' + JSON.stringify($scope.job));
 
                             if (resp.code && resp.code == HTTP_ERRORS.UNAUTHORIZED) {
                                 oauth2Provider.showLoginModal();

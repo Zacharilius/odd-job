@@ -33,7 +33,7 @@ var app = angular.module('oddjobApp',
                     controller: 'MyProfileCtrl'
                 }).
                 when('/job/create', {
-                    templateUrl: '/partials/post_job.html',
+                    templateUrl: '/partials/create_job.html',
                     controller: 'JobCtrl'
                 }).
                 when('/', {

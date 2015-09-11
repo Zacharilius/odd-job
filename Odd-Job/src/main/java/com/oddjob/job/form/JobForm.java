@@ -3,15 +3,9 @@ package com.oddjob.job.form;
 import java.util.Date;
 import java.util.List;
 
-import com.google.api.server.spi.config.AnnotationBoolean;
-import com.google.api.server.spi.config.ApiResourceProperty;
-import com.google.appengine.repackaged.com.google.common.collect.ImmutableList;
-import com.googlecode.objectify.Key;
 
-public class JobForm {
-    /**
-     * The title of the job.
-     */
+public class JobForm{
+	
     private String title;
 
     /**
@@ -25,49 +19,40 @@ public class JobForm {
      */
     private List<String> tags;
     
-    /**
-     * The posting date
-     */
-    private Date postDate;
-    
-    /**
+	/**
      * Hours for job
      */
-    private double jobHours;
+    private double hours;
     
     /**
      * Job pay
      */
-    private double jobPay;
+    private double pay;
     
     /**
      * Needs completed by date
      */
-    private Date completionDate;
+    private Date completionDate;	
+    
+    private JobForm(){}
 
     
     
-    
-	/**
+    /**
 	 * @param title
 	 * @param description
-	 * @param profileKey
-	 * @param posterUserId
 	 * @param tags
-	 * @param postDate
-	 * @param jobHours
-	 * @param jobPay
+	 * @param hours
+	 * @param pay
 	 * @param completionDate
 	 */
-	public JobForm(String title, String description, List<String> tags,
-			Date postDate, double jobHours, double jobPay, Date completionDate) {
+	public JobForm(String title, String description, List<String> tags, double hours, double pay, Date completionDate) {
 		this.title = title;
 		this.description = description;
-		this.tags = tags == null ? null : ImmutableList.copyOf(tags);
-		this.postDate = postDate == null ? null : new Date(postDate.getTime());
-		this.jobHours = jobHours;
-		this.jobPay = jobPay;
-		this.completionDate = completionDate == null ? null : new Date(completionDate.getTime());
+		this.tags = tags;
+		this.hours = hours;
+		this.pay = pay;
+		this.completionDate = completionDate;
 	}
 
 	/**
@@ -84,7 +69,6 @@ public class JobForm {
 		return description;
 	}
 
-
 	/**
 	 * @return the tags
 	 */
@@ -93,24 +77,17 @@ public class JobForm {
 	}
 
 	/**
-	 * @return the postDate
+	 * @return the hours
 	 */
-	public Date getPostDate() {
-		return postDate;
+	public double getHours() {
+		return hours;
 	}
 
 	/**
-	 * @return the jobHours
+	 * @return the pay
 	 */
-	public double getJobHours() {
-		return jobHours;
-	}
-
-	/**
-	 * @return the jobPay
-	 */
-	public double getJobPay() {
-		return jobPay;
+	public double getPay() {
+		return pay;
 	}
 
 	/**
@@ -120,4 +97,9 @@ public class JobForm {
 		return completionDate;
 	}
 
+	
+
+
+    
+    
 }
