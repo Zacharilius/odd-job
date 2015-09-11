@@ -941,4 +941,40 @@ public Job createJob(final User user, final JobForm jobForm)
     }); 
     return job;
 }
+/**
+ * Queries the datastore for all jobs the user created
+ *
+ * @return A list of job objects
+ * @throws UnauthorizedException when the user is not signed in.
+ */
+@ApiMethod(
+        name = "getJobsCreated",
+        path = "getJobsCreated",
+        httpMethod = HttpMethod.POST
+)
+public List<Job> getJobsCreated(final User user)throws UnauthorizedException {
+	if (user == null) {
+		throw new UnauthorizedException("Authorization required");
+	}
+	String userId = user.getUserId();
+    Key key = Key.create(Profile.class, userId);
+    
+    Query<Job> query = ofy().load().type(Job.class).ancestor(key);
+	return query.list();
+}
+/**
+ * Queries the datastore for all jobs. sorts by posting date;
+ *
+ * @return A list of all job objects
+ * @throws UnauthorizedException when the user is not signed in.
+ */
+@ApiMethod(
+        name = "getAllJobsCreated",
+        path = "getAllJobsCreated",
+        httpMethod = HttpMethod.POST
+)
+public List<Job> getAllJobsCreated()throws UnauthorizedException {
+    Query<Job> query = ofy().load().type(Job.class).order("postDate");
+	return query.list();
+}
 }
