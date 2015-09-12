@@ -10,6 +10,8 @@
         </div>
     </div>
     <div class="row">
+        <div class="col-md-2"></div>
+    
         <div class="col-md-8">
             <h3>Create a Job</h3>
 
@@ -38,6 +40,10 @@
                             class="form-control">
                     </select>
                 </div>
+                <div class="form-group">
+					<label for="map">Where's the work being done</label>
+                	<div id="map"></div>
+               	</div>
 				<div class="form-group">
 					<label for="hours">How many work hours</label>
   					<input id = "hours" name = "hours" ng-model="job.hours" type="number" min="0" step=".5">

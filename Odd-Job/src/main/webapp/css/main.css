@@ -104,3 +104,32 @@ ul#conferences-list {
 .section-a {
     padding: 50px 0;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.center-view{
+	margin: 0 auto;
+}
+
+#map{
+	height: 500px;
+	width: 100%;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}

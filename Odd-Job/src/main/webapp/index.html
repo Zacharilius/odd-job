@@ -6,14 +6,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Conference Central</title>
+    <title>Odd-Job</title>
 
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/bootstrap-cosmo.css">
     <link rel="stylesheet" href="/css/main.css">
     <link rel="stylesheet" href="/css/offcanvas.css">
     <link rel="shortcut icon" href="/img/favicon.ico">
-    <meta property="og:title" content="Conference Central">
+    <meta property="og:title" content="Odd-Job">
     <meta property="og:type" content="website">
     <meta property="og:description" content="Conference Central web app that lets you manage conferences.">
     <meta property="og:image" content="/img/CloudPlatform_logo.png">
@@ -21,6 +21,8 @@
 
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular-route.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js"></script>
+    
     <script>
         /**
          * Initializes the Google API JavaScript client. Bootstrap the angular module after loading the Google libraries
@@ -33,12 +35,12 @@
             });
         };
     </script>
+ 
     <script src="//apis.google.com/js/client:plusone.js?onload=init"></script>
 </head>
 
 <!-- Restore the credential from cookie if stored by calling initSignInButton() -->
 <body ng-controller="RootCtrl" ng-init="initSignInButton()">
-
 <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container">
         <div class="navbar-header">
@@ -52,8 +54,8 @@
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li ng-class="{ active: isActive('/conference')}" ng-click="collapseNavbar()"><a href="#/conference">Show Conferences</a></li>
-                <li ng-class="{ active: isActive('/conference/create')}" ng-click="collapseNavbar()"><a href="#/conference/create" >Create Conferences</a></li>
+                <li ng-class="{ active: isActive('/conference')}" ng-click="collapseNavbar()"><a href="#/conference">Show Jobs</a></li>
+                <li ng-class="{ active: isActive('/job/create')}" ng-click="collapseNavbar()"><a href="#/job/create" >Create Job</a></li>
                 <li ng-class="{ active: isActive('/profile')}" ng-click="collapseNavbar()"><a href="#/profile">My Profile</a></li>
                 <li class="nav-divider"></li>
             </ul>
@@ -76,14 +78,19 @@
         </div>
     </div>
     <ng-view></ng-view>
+    
 </div>
 
 <script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.10.0/ui-bootstrap-tpls.js"></script>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+<script src="/js/maps.js"></script>
 <script src="/js/app.js"></script>
 <script src="/js/controllers.js"></script>
-
+<script src="/js/main.js"></script>
+<script type=text/javascript>
+google.maps.event.addDomListener(window, 'load', mapInitialize);
+</script>
 <!-- Put the signInButton to invoke the gapi.signin.render to restore the credential if stored in cookie. -->
 <span id="signInButton" style="display: none" disabled="true"></span>
 

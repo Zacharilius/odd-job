@@ -80,6 +80,17 @@ public class Job {
     @Index
     private Date completionDate;
     
+    
+    /**
+     * Latitude of jobMarker object
+     */
+    private double latitude;
+ 
+    /**
+     * Longitude of jobMarker object
+     */
+    private double longitude;
+    
     /**
      * Just making the default constructor private.
      */
@@ -118,7 +129,8 @@ public class Job {
         
         //Adds the posting date.
         this.postDate = new Date();
-		
+		this.latitude = jobForm.getLatitude();
+		this.longitude = jobForm.getLongitude();
 	}
 	
     /**
@@ -190,5 +202,19 @@ public class Job {
 	public Date getCompletionDate() {
 		return completionDate;
 	}
+	/**
+	 * Gets the job's latitude position
+	 * @return latitude
+	 */
+	public double getLatitude(){
+		return latitude;
+	}
 	
+	/**
+	 * Gets the job longitude position 
+	 * @return longitude
+	 */
+	public double getLongitude(){
+		return longitude;
+	}
 }
