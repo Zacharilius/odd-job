@@ -217,4 +217,8 @@ public class Job {
 	public double getLongitude(){
 		return longitude;
 	}
+    // Get a String version of the key
+    public String getWebsafeKey() {
+        return Key.create(profileKey, Job.class, id).getString();
+    }
 }

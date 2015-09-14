@@ -1,4 +1,4 @@
-<div ng-controller="ConferenceDetailCtrl">
+<div ng-controller="JobDetailCtrl">
     <div class="row">
         <div class="col-lg-12">
             <div id="messages" class="alert alert-{{alertStatus}}" ng-show="messages">
@@ -13,22 +13,14 @@
     <div class="row" ng-init="init()">
         <div class="col-md-9">
             <div class="well well-sm">
-                <h2>{{conference.name}}</h2>
-                <h5>{{conference.description}}</h5>
-                <div>
-                    <label for="registered">Registered/Open: </label>
-                    <span id="registered">{{conference.maxAttendees - conference.seatsAvailable}} / {{conference.maxAttendees}}</span>
-                </div>
-                <div>
-                    <label for="organizer">Organizer: </label>
-                    <span id="organizer">{{conference.organizerDisplayName}}</span>
-                </div>
-                <p><a class="btn btn-primary" ng-hide="isUserAttending" ng-click="registerForConference()"
-                        ng-disabled="loading">Register</a></p>
-                <p><a class="btn btn-primary" ng-show="isUserAttending" ng-click="unregisterFromConference()"
-                        ng-disabled="loading">Unregister</a></p>
-            </div>
+                <h2>{{job.title}}</h2>
+                <h5>{{job.description}}</h5>
 
+                <div>
+                    <label for="organizer">Job Listing User: </label>
+                    <span id="organizer">{{job.posterUserId}}</span>
+                </div>
+            </div>
             <form class="form" novalidate role="form">
                 <fieldset>
                     <div>

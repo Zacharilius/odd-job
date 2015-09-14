@@ -89,7 +89,7 @@ ul#conferences-list {
     padding-bottom: 50px;
     color: #f8f8f8;
     text-shadow: black 0.1em 0.1em 0.2em;
-    background: url(/img/meeting-room.jpg) no-repeat center center;
+    background: url(/img/moving-a-couch.jpg) no-repeat center center;
     background-size: cover;
     text-align: center;
 }
@@ -119,7 +119,11 @@ ul#conferences-list {
 
 
 
-
+.infoWindowContent {
+    font-size:  14px !important;
+    border-top: 1px solid #ccc;
+    padding-top: 10px;
+}
 
 
 

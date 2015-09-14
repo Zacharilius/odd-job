@@ -1049,7 +1049,50 @@ oddjobApp.controllers.controller('ShowJobCtrl', function ($scope, $log, oauth2Pr
         {displayName: '<=', enumValue: 'LTEQ'},
         {displayName: '!=', enumValue: 'NE'}
     ];
+    /**
+     * Map displaying all jobs
+     */
+    $scope.markers = [];
+    
+    var latitude = 47.6097;
+    var longitude = -122.3331;
+    var mapCanvas = document.getElementById('map');
+	var starterLatLng = {lat: latitude, lng: longitude};
+	var mapOptions = {
+			center: starterLatLng,
+			zoom: 8,
+			mapTypeId: google.maps.MapTypeId.ROADMAP
+	};
+	var infoWindow = new google.maps.InfoWindow();
 
+	$scope.map = new google.maps.Map(mapCanvas, mapOptions);
+    $scope.markers = [];
+    
+
+	var createMarker = function (job){
+        
+        var marker = new google.maps.Marker({
+            map: $scope.map,
+            position: new google.maps.LatLng(job.latitude, job.longitude),
+            title: job.title
+        });
+        marker.content = '<div class="infoWindowContent">' + job.description + '</div>';
+        
+        google.maps.event.addListener(marker, 'click', function(){
+            infoWindow.setContent('<h2>' + job.title + '</h2>' + job.description);
+            infoWindow.open($scope.map, marker);
+        });
+        
+        $scope.markers.push(marker);
+        
+    }
+    $scope.openInfoWindow = function(e, selectedMarker){
+        e.preventDefault();
+        google.maps.event.trigger(selectedMarker, 'click');
+    }
+
+    
+    
     /**
      * Holds the job currently displayed in the page.
      * @type {Array}
@@ -1207,9 +1250,12 @@ oddjobApp.controllers.controller('ShowJobCtrl', function ($scope, $log, oauth2Pr
                         $scope.alertStatus = 'success';
                         $log.info($scope.messages);
 
+                        
                         $scope.jobs = [];
+                        $scope.markers = [];
                         angular.forEach(resp.items, function (job) {
                             $scope.jobs.push(job);
+                            createMarker(job);
                         });
                     }
                     $scope.submitted = true;
