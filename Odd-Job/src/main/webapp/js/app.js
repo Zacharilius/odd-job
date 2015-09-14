@@ -24,7 +24,7 @@ var app = angular.module('oddjobApp',
                     templateUrl: '/partials/create_job.html',
                     controller: 'JobCtrl'
                 }).
-                when('/job/detail/:websafeJobKey', {
+                when('/job/:websafeJobKey', {
                     templateUrl: '/partials/job_detail.html',
                     controller: 'JobDetailCtrl'
                 }).

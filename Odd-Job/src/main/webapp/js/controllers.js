@@ -1284,124 +1284,25 @@ oddjobApp.controllers.controller('JobDetailCtrl', function ($scope, $log, $route
      */
     $scope.init = function () {
         $scope.loading = true;
-        gapi.client.conference.getConference({
-            websafeConferenceKey: $routeParams.websafeConferenceKey
+        gapi.client.conference.getJob({
+            websafeJobKey: $routeParams.websafeJobKey
         }).execute(function (resp) {
             $scope.$apply(function () {
                 $scope.loading = false;
                 if (resp.error) {
                     // The request has failed.
                     var errorMessage = resp.error.message || '';
-                    $scope.messages = 'Failed to get the conference : ' + $routeParams.websafeKey
+                    $scope.messages = 'Failed to get the job : ' + $routeParams.websafeKey
                         + ' ' + errorMessage;
                     $scope.alertStatus = 'warning';
                     $log.error($scope.messages);
                 } else {
                     // The request has succeeded.
                     $scope.alertStatus = 'success';
-                    $scope.conference = resp.result;
-                }
-            });
-        });
-
-        $scope.loading = true;
-        // If the user is attending the conference, updates the status message and available function.
-        gapi.client.conference.getProfile().execute(function (resp) {
-            $scope.$apply(function () {
-                $scope.loading = false;
-                if (resp.error) {
-                    // Failed to get a user profile.
-                } else {
-                    var profile = resp.result;
-                    for (var i = 0; i < profile.conferenceKeysToAttend.length; i++) {
-                        if ($routeParams.websafeConferenceKey == profile.conferenceKeysToAttend[i]) {
-                            // The user is attending the conference.
-                            $scope.alertStatus = 'info';
-                            $scope.messages = 'You are attending this conference';
-                            $scope.isUserAttending = true;
-                        }
-                    }
+                    $scope.job = resp.result;
                 }
             });
         });
     };
 
-
-    /**
-     * Invokes the conference.registerForConference method.
-     */
-    $scope.registerForConference = function () {
-        $scope.loading = true;
-        gapi.client.conference.registerForConference({
-            websafeConferenceKey: $routeParams.websafeConferenceKey
-        }).execute(function (resp) {
-            $scope.$apply(function () {
-                $scope.loading = false;
-                if (resp.error) {
-                    // The request has failed.
-                    var errorMessage = resp.error.message || '';
-                    $scope.messages = 'Failed to register for the conference : ' + errorMessage;
-                    $scope.alertStatus = 'warning';
-                    $log.error($scope.messages);
-
-                    if (resp.code && resp.code == HTTP_ERRORS.UNAUTHORIZED) {
-                        oauth2Provider.showLoginModal();
-                        return;
-                    }
-                } else {
-                    if (resp.result) {
-                        // Register succeeded.
-                        $scope.messages = 'Registered for the conference';
-                        $scope.alertStatus = 'success';
-                        $scope.isUserAttending = true;
-                        $scope.conference.seatsAvailable = $scope.conference.seatsAvailable - 1;
-                    } else {
-                        $scope.messages = 'Failed to register for the conference';
-                        $scope.alertStatus = 'warning';
-                    }
-                }
-            });
-        });
-    };
-
-    /**
-     * Invokes the conference.unregisterForConference method.
-     */
-    $scope.unregisterFromConference = function () {
-        $scope.loading = true;
-        gapi.client.conference.unregisterFromConference({
-            websafeConferenceKey: $routeParams.websafeConferenceKey
-        }).execute(function (resp) {
-            $scope.$apply(function () {
-                $scope.loading = false;
-                if (resp.error) {
-                    // The request has failed.
-                    var errorMessage = resp.error.message || '';
-                    $scope.messages = 'Failed to unregister from the conference : ' + errorMessage;
-                    $scope.alertStatus = 'warning';
-                    $log.error($scope.messages);
-                    if (resp.code && resp.code == HTTP_ERRORS.UNAUTHORIZED) {
-                        oauth2Provider.showLoginModal();
-                        return;
-                    }
-                } else {
-                    if (resp.result) {
-                        // Unregister succeeded.
-                        $scope.messages = 'Unregistered from the conference';
-                        $scope.alertStatus = 'success';
-                        $scope.conference.seatsAvailable = $scope.conference.seatsAvailable + 1;
-                        $scope.isUserAttending = false;
-                        $log.info($scope.messages);
-                    } else {
-                        var errorMessage = resp.error.message || '';
-                        $scope.messages = 'Failed to unregister from the conference : ' + $routeParams.websafeKey +
-                            ' : ' + errorMessage;
-                        $scope.messages = 'Failed to unregister from the conference';
-                        $scope.alertStatus = 'warning';
-                        $log.error($scope.messages);
-                    }
-                }
-            });
-        });
-    };
 });

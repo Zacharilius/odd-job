@@ -1,4 +1,4 @@
-<div ng-controller="ShowJobCtrl" ng-init="SearchByMap()>
+<div ng-controller="ShowJobCtrl" ng-init="SearchByMap()">
     <div class="row">
         <div class="col-lg-12">
             <div id="messages" class="alert alert-{{alertStatus}}" ng-show="messages">
@@ -64,7 +64,7 @@
 	                    </thead>
 	                    <tbody>
 	                    <tr ng-repeat="job in jobs | startFrom: pagination.currentPage * pagination.pageSize | limitTo: pagination.pageSize">
-	                        <td><a href="#/job/detail/{{job.websafeKey}}">{{job.title}}</a></td>
+	                        <td><a href="#/job/{{job.websafeKey}}">{{job.title}}</a></td>
 	                        <td>{{job.pay}}</td>
 	                        <td>{{job.hours}}</td>
 	                        <td>{{job.postDate | date:'dd-MMMM-yyyy'}}</td>

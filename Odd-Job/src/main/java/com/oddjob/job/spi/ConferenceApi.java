@@ -977,4 +977,26 @@ public List<Job> getAllJobsCreated()throws UnauthorizedException {
     Query<Job> query = ofy().load().type(Job.class).order("postDate");
 	return query.list();
 }
+/**
+ * Returns a Conference object with the given conferenceId.
+ *
+ * @param websafeConferenceKey The String representation of the Conference Key.
+ * @return a Conference object with the given conferenceId.
+ * @throws NotFoundException when there is no Conference with the given conferenceId.
+ */
+@ApiMethod(
+        name = "getJob",
+        path = "job/{websafeJobKey}",
+        httpMethod = HttpMethod.GET
+)
+public Job getJob(
+        @Named("websafeJobKey") final String websafeJobKey)
+        throws NotFoundException {
+    Key<Job> jobKey = Key.create(websafeJobKey);
+    Job job = ofy().load().key(jobKey).now();
+    if (job == null) {
+        throw new NotFoundException("No Conference found with key: " + websafeJobKey);
+    }
+    return job;
+}
 }
