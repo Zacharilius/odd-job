@@ -9,13 +9,13 @@ var oddjobApp = oddjobApp || {};
 
 /**
  * @ngdoc module
- * @name conferenceControllers
+ * @name odd-jobControllers
  *
  * @description
  * Angular module for controllers.
  *
  */
-oddjobApp.controllers = angular.module('conferenceControllers', ['ui.bootstrap']);
+oddjobApp.controllers = angular.module('odd-jobControllers', ['ui.bootstrap']);
 
 /**
  * @ngdoc controller
@@ -909,7 +909,20 @@ oddjobApp.controllers.controller('JobCtrl',
         $scope.states = [
                          'Washington'
         ];
+        $scope.job.latitude = 47.6097;
+        $scope.job.longitude = -122.3331;
+        var mapCanvas = document.getElementById('map');
+		var starterLatLng = {lat: $scope.job.latitude, lng: $scope.job.longitude};
+		var mapOptions = {
+				center: starterLatLng,
+				zoom: 8,
+				mapTypeId: google.maps.MapTypeId.ROADMAP
+			};
+		$scope.map = new google.maps.Map(mapCanvas, mapOptions);
+		$scope.jobMarker = new google.maps.Marker({position: starterLatLng, map: $scope.map, title: 'Job', draggable: true});
 
+		
+        
         /**
          * Holds the default values for the input candidates for tags select.
          * @type {string[]}
@@ -944,8 +957,6 @@ oddjobApp.controllers.controller('JobCtrl',
          * @returns {boolean|*} true if valid, false otherwise.
          */
         $scope.isValidJob = function (jobForm) {
-        	console.log(!jobForm.$invalid);
-        	console.log($scope.isValidDates());
             return !jobForm.$invalid &&
                 $scope.isValidDates();
         }
@@ -959,10 +970,9 @@ oddjobApp.controllers.controller('JobCtrl',
             if (!$scope.isValidJob(jobForm)) {
                 return;
             }
-
+            $scope.job.latitude = $scope.jobMarker.position.G;
+            $scope.job.longitude = $scope.jobMarker.position.K;
             $scope.loading = true;
-            $scope.job.latitude = jobMarker.position.G;
-            $scope.job.longitude = jobMarker.position.K;
             gapi.client.conference.createJob($scope.job).
                 execute(function (resp) {
                     $scope.$apply(function () {
@@ -999,13 +1009,18 @@ oddjobApp.controllers.controller('JobCtrl',
  */
 oddjobApp.controllers.controller('ShowJobCtrl', function ($scope, $log, oauth2Provider, HTTP_ERRORS) {
 
+	/**
+	 * Holds the jobs displayed on the page
+	 */
+	$scope.jobs = [];
+	
     /**
      * Holds the status if the query is being executed.
      * @type {boolean}
      */
     $scope.submitted = false;
 
-    $scope.selectedTab = 'ALL';
+    $scope.selectedTab = 'MAP';
 
     /**
      * Holds the filters that will be applied when queryConferencesAll is invoked.
@@ -1016,7 +1031,7 @@ oddjobApp.controllers.controller('ShowJobCtrl', function ($scope, $log, oauth2Pr
 
     $scope.filtereableFields = [
         {enumValue: 'CITY', displayName: 'City'},
-        {enumValue: 'TOPIC', displayName: 'Topic'},
+        {enumValue: 'STATE', displayName: 'State'},
         {enumValue: 'MONTH', displayName: 'Start month'},
         {enumValue: 'MAX_ATTENDEES', displayName: 'Max Attendees'}
     ]
@@ -1036,10 +1051,10 @@ oddjobApp.controllers.controller('ShowJobCtrl', function ($scope, $log, oauth2Pr
     ];
 
     /**
-     * Holds the conferences currently displayed in the page.
+     * Holds the job currently displayed in the page.
      * @type {Array}
      */
-    $scope.conferences = [];
+    $scope.job = [];
 
     /**
      * Holds the state if offcanvas is enabled.
@@ -1051,34 +1066,20 @@ oddjobApp.controllers.controller('ShowJobCtrl', function ($scope, $log, oauth2Pr
     /**
      * Sets the selected tab to 'ALL'
      */
-    $scope.tabAllSelected = function () {
-        $scope.selectedTab = 'ALL';
-        $scope.queryConferences();
+    $scope.SearchByMap = function () {
+        $scope.selectedTab = 'MAP';
+        $scope.queryJobs();
     };
 
     /**
      * Sets the selected tab to 'YOU_HAVE_CREATED'
      */
-    $scope.tabYouHaveCreatedSelected = function () {
-        $scope.selectedTab = 'YOU_HAVE_CREATED';
-        if (!oauth2Provider.signedIn) {
-            oauth2Provider.showLoginModal();
-            return;
-        }
-        $scope.queryConferences();
+    $scope.SearchByList = function () {
+        $scope.selectedTab = 'LIST';
+        $scope.queryJobs();
     };
 
-    /**
-     * Sets the selected tab to 'YOU_WILL_ATTEND'
-     */
-    $scope.tabYouWillAttendSelected = function () {
-        $scope.selectedTab = 'YOU_WILL_ATTEND';
-        if (!oauth2Provider.signedIn) {
-            oauth2Provider.showLoginModal();
-            return;
-        }
-        $scope.queryConferences();
-    };
+
 
     /**
      * Toggles the status of the offcanvas.
@@ -1100,7 +1101,7 @@ oddjobApp.controllers.controller('ShowJobCtrl', function ($scope, $log, oauth2Pr
      * @returns {number}
      */
     $scope.pagination.numberOfPages = function () {
-        return Math.ceil($scope.conferences.length / $scope.pagination.pageSize);
+        return Math.ceil($scope.jobs.length / $scope.pagination.pageSize);
     };
 
     /**
@@ -1160,15 +1161,13 @@ oddjobApp.controllers.controller('ShowJobCtrl', function ($scope, $log, oauth2Pr
      * Query the conferences depending on the tab currently selected.
      *
      */
-    $scope.queryConferences = function () {
+    $scope.queryJobs = function () {
         $scope.submitted = false;
-        if ($scope.selectedTab == 'ALL') {
+        if ($scope.selectedTab == 'MAP') {
             $scope.queryConferencesAll();
-        } else if ($scope.selectedTab == 'YOU_HAVE_CREATED') {
-            $scope.getConferencesCreated();
-        } else if ($scope.selectedTab == 'YOU_WILL_ATTEND') {
-            $scope.getConferencesAttend();
-        }
+        } else if ($scope.selectedTab == 'LIST') {
+            $scope.queryConferencesAll();
+        } 
     };
 
     /**
@@ -1177,7 +1176,8 @@ oddjobApp.controllers.controller('ShowJobCtrl', function ($scope, $log, oauth2Pr
     $scope.queryConferencesAll = function () {
         var sendFilters = {
             filters: []
-        }
+        };
+        /*
         for (var i = 0; i < $scope.filters.length; i++) {
             var filter = $scope.filters[i];
             if (filter.field && filter.operator && filter.value) {
@@ -1188,15 +1188,16 @@ oddjobApp.controllers.controller('ShowJobCtrl', function ($scope, $log, oauth2Pr
                 });
             }
         }
+        */
         $scope.loading = true;
-        gapi.client.conference.queryConferences(sendFilters).
+        gapi.client.conference.getAllJobsCreated().
             execute(function (resp) {
                 $scope.$apply(function () {
                     $scope.loading = false;
                     if (resp.error) {
                         // The request has failed.
                         var errorMessage = resp.error.message || '';
-                        $scope.messages = 'Failed to query conferences : ' + errorMessage;
+                        $scope.messages = 'Failed to query jobs : ' + errorMessage;
                         $scope.alertStatus = 'warning';
                         $log.error($scope.messages + ' filters : ' + JSON.stringify(sendFilters));
                     } else {
@@ -1206,83 +1207,155 @@ oddjobApp.controllers.controller('ShowJobCtrl', function ($scope, $log, oauth2Pr
                         $scope.alertStatus = 'success';
                         $log.info($scope.messages);
 
-                        $scope.conferences = [];
-                        angular.forEach(resp.items, function (conference) {
-                            $scope.conferences.push(conference);
+                        $scope.jobs = [];
+                        angular.forEach(resp.items, function (job) {
+                            $scope.jobs.push(job);
                         });
                     }
                     $scope.submitted = true;
                 });
             });
     }
+});
+
+
+/**
+ * @ngdoc controller
+ * @name JobDetailCtrl
+ *
+ * @description
+ * A controller used for the job detail page.
+ */
+oddjobApp.controllers.controller('JobDetailCtrl', function ($scope, $log, $routeParams, HTTP_ERRORS) {
+    $scope.job = {};
+
+    $scope.isUserAttending = false;
 
     /**
-     * Invokes the conference.getConferencesCreated method.
+     * Initializes the conference detail page.
+     * Invokes the conference.getConference method and sets the returned conference in the $scope.
+     *
      */
-    $scope.getConferencesCreated = function () {
+    $scope.init = function () {
         $scope.loading = true;
-        gapi.client.conference.getConferencesCreated().
-            execute(function (resp) {
-                $scope.$apply(function () {
-                    $scope.loading = false;
-                    if (resp.error) {
-                        // The request has failed.
-                        var errorMessage = resp.error.message || '';
-                        $scope.messages = 'Failed to query the conferences created : ' + errorMessage;
-                        $scope.alertStatus = 'warning';
-                        $log.error($scope.messages);
-
-                        if (resp.code && resp.code == HTTP_ERRORS.UNAUTHORIZED) {
-                            oauth2Provider.showLoginModal();
-                            return;
-                        }
-                    } else {
-                        // The request has succeeded.
-                        $scope.submitted = false;
-                        $scope.messages = 'Query succeeded : Conferences you have created';
-                        $scope.alertStatus = 'success';
-                        $log.info($scope.messages);
-
-                        $scope.conferences = [];
-                        angular.forEach(resp.items, function (conference) {
-                            $scope.conferences.push(conference);
-                        });
-                    }
-                    $scope.submitted = true;
-                });
+        gapi.client.conference.getConference({
+            websafeConferenceKey: $routeParams.websafeConferenceKey
+        }).execute(function (resp) {
+            $scope.$apply(function () {
+                $scope.loading = false;
+                if (resp.error) {
+                    // The request has failed.
+                    var errorMessage = resp.error.message || '';
+                    $scope.messages = 'Failed to get the conference : ' + $routeParams.websafeKey
+                        + ' ' + errorMessage;
+                    $scope.alertStatus = 'warning';
+                    $log.error($scope.messages);
+                } else {
+                    // The request has succeeded.
+                    $scope.alertStatus = 'success';
+                    $scope.conference = resp.result;
+                }
             });
+        });
+
+        $scope.loading = true;
+        // If the user is attending the conference, updates the status message and available function.
+        gapi.client.conference.getProfile().execute(function (resp) {
+            $scope.$apply(function () {
+                $scope.loading = false;
+                if (resp.error) {
+                    // Failed to get a user profile.
+                } else {
+                    var profile = resp.result;
+                    for (var i = 0; i < profile.conferenceKeysToAttend.length; i++) {
+                        if ($routeParams.websafeConferenceKey == profile.conferenceKeysToAttend[i]) {
+                            // The user is attending the conference.
+                            $scope.alertStatus = 'info';
+                            $scope.messages = 'You are attending this conference';
+                            $scope.isUserAttending = true;
+                        }
+                    }
+                }
+            });
+        });
+    };
+
+
+    /**
+     * Invokes the conference.registerForConference method.
+     */
+    $scope.registerForConference = function () {
+        $scope.loading = true;
+        gapi.client.conference.registerForConference({
+            websafeConferenceKey: $routeParams.websafeConferenceKey
+        }).execute(function (resp) {
+            $scope.$apply(function () {
+                $scope.loading = false;
+                if (resp.error) {
+                    // The request has failed.
+                    var errorMessage = resp.error.message || '';
+                    $scope.messages = 'Failed to register for the conference : ' + errorMessage;
+                    $scope.alertStatus = 'warning';
+                    $log.error($scope.messages);
+
+                    if (resp.code && resp.code == HTTP_ERRORS.UNAUTHORIZED) {
+                        oauth2Provider.showLoginModal();
+                        return;
+                    }
+                } else {
+                    if (resp.result) {
+                        // Register succeeded.
+                        $scope.messages = 'Registered for the conference';
+                        $scope.alertStatus = 'success';
+                        $scope.isUserAttending = true;
+                        $scope.conference.seatsAvailable = $scope.conference.seatsAvailable - 1;
+                    } else {
+                        $scope.messages = 'Failed to register for the conference';
+                        $scope.alertStatus = 'warning';
+                    }
+                }
+            });
+        });
     };
 
     /**
-     * Retrieves the conferences to attend by calling the conference.getProfile method and
-     * invokes the conference.getConference method n times where n == the number of the conferences to attend.
+     * Invokes the conference.unregisterForConference method.
      */
-    $scope.getConferencesAttend = function () {
+    $scope.unregisterFromConference = function () {
         $scope.loading = true;
-        gapi.client.conference.getConferencesToAttend().
-            execute(function (resp) {
-                $scope.$apply(function () {
-                    if (resp.error) {
-                        // The request has failed.
+        gapi.client.conference.unregisterFromConference({
+            websafeConferenceKey: $routeParams.websafeConferenceKey
+        }).execute(function (resp) {
+            $scope.$apply(function () {
+                $scope.loading = false;
+                if (resp.error) {
+                    // The request has failed.
+                    var errorMessage = resp.error.message || '';
+                    $scope.messages = 'Failed to unregister from the conference : ' + errorMessage;
+                    $scope.alertStatus = 'warning';
+                    $log.error($scope.messages);
+                    if (resp.code && resp.code == HTTP_ERRORS.UNAUTHORIZED) {
+                        oauth2Provider.showLoginModal();
+                        return;
+                    }
+                } else {
+                    if (resp.result) {
+                        // Unregister succeeded.
+                        $scope.messages = 'Unregistered from the conference';
+                        $scope.alertStatus = 'success';
+                        $scope.conference.seatsAvailable = $scope.conference.seatsAvailable + 1;
+                        $scope.isUserAttending = false;
+                        $log.info($scope.messages);
+                    } else {
                         var errorMessage = resp.error.message || '';
-                        $scope.messages = 'Failed to query the conferences to attend : ' + errorMessage;
+                        $scope.messages = 'Failed to unregister from the conference : ' + $routeParams.websafeKey +
+                            ' : ' + errorMessage;
+                        $scope.messages = 'Failed to unregister from the conference';
                         $scope.alertStatus = 'warning';
                         $log.error($scope.messages);
-
-                        if (resp.code && resp.code == HTTP_ERRORS.UNAUTHORIZED) {
-                            oauth2Provider.showLoginModal();
-                            return;
-                        }
-                    } else {
-                        // The request has succeeded.
-                        $scope.conferences = resp.result.items;
-                        $scope.loading = false;
-                        $scope.messages = 'Query succeeded : Conferences you will attend (or you have attended)';
-                        $scope.alertStatus = 'success';
-                        $log.info($scope.messages);
                     }
-                    $scope.submitted = true;
-                });
+                }
             });
+        });
     };
 });

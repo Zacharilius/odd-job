@@ -2,6 +2,7 @@
     	 * Initializes the Google Maps API
     	 */
   		function mapInitialize() {
+  			console.log("mapInitialize");
   			var mapCanvas = document.getElementById('map');
   			var starterLatLng = {lat: 47.6097, lng: -122.3331};
   		    var mapOptions = {

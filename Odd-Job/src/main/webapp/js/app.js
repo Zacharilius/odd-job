@@ -12,7 +12,7 @@
  *
  */
 var app = angular.module('oddjobApp',
-    ['conferenceControllers', 'ngRoute', 'ui.bootstrap']).
+    ['odd-jobControllers', 'ngRoute', 'ui.bootstrap']).
     config(['$routeProvider',
         function ($routeProvider) {
             $routeProvider.
@@ -35,6 +35,14 @@ var app = angular.module('oddjobApp',
                 when('/job/create', {
                     templateUrl: '/partials/create_job.html',
                     controller: 'JobCtrl'
+                }).
+                when('/job/detail/:websafeJobKey', {
+                    templateUrl: '/partials/job_detail.html',
+                    controller: 'JobDetailCtrl'
+                }).
+                when('/job', {
+                    templateUrl: '/partials/show_jobs.html',
+                    controller: 'ShowJobCtrl'
                 }).
                 when('/', {
                     templateUrl: '/partials/home.html'
