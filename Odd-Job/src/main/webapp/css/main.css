@@ -1,0 +1,85 @@
+body{
+	background-color: #FFF;
+	color: #333333
+}
+#cover {
+  z-index: -1;
+  position: fixed; 
+  top: -50%; 
+  left: -50%; 
+  width: 200%; 
+  height: 200%;
+}
+#cover img {
+  position: absolute; 
+  top: 0; 
+  left: 0; 
+  right: 0; 
+  bottom: 0; 
+  margin: auto; 
+  min-width: 50%;
+  min-height: 50%;
+}
+.cover-header{
+	z-index: 2;
+	position: relative;
+	margin: 0 auto;
+}
+.cover-text{
+	text-align: center;
+	color: #FFF;
+}
+.cover-text h1{
+	margin-bottom: 5px;
+	margin-left: 10px;
+	margin-right: 10px;
+}
+.cover-text-group{
+	display: inline-block;
+	vertical-align: bottom;
+}
+#signInLink, #signOutLink {
+    cursor: pointer;
+}
+
+.spinner {
+    position: fixed;
+    top: 70px;
+    z-index: 9999;
+}
+
+/* To disable the Google+ Sign In Button, but gapi.signin.render should be invoked to store the credential
+   if that is stored in cookie. */
+#signInButton iframe {
+    display: none;
+}
+
+.infoWindowContent {
+    font-size:  14px !important;
+    border-top: 1px solid #ccc;
+    padding-top: 10px;
+}
+
+
+
+.center-view{
+	margin: 0 auto;
+}
+
+#map{
+	height: 500px;
+	width: 100%;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+
+.profile-picture{
+	width: 45%;
+}
+.profile-information{
+	width: 45%;
+}
+.profile-jobs{
+	margin-top: 100px;
+}

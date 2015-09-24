@@ -1,0 +1,52 @@
+.navbar-default {
+    background-color: #CE533B;
+    border-color: #CE533B;
+}    
+.navbar-default .navbar-nav>li>a {
+    color: rgba(255,255,255,.75);
+}
+.navbar-default .navbar-brand {
+    color: #FFF; 
+}
+.navbar-default .navbar-brand:focus, .navbar-default .navbar-brand:hover {
+    color: #FFF; 
+}    
+.navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:focus, .navbar-default .navbar-nav>.active>a:hover {
+    border-bottom: 2px solid #FFF;
+    background-color: transparent;
+    color: #FFF;   
+    padding-bottom: 0px;
+} 
+.navbar-default .navbar-nav>li>a:focus, .navbar-default .navbar-nav>li>a:hover {
+    border-bottom: 2px solid #FFF;
+    background-color: transparent;
+    color: #FFF; 
+    padding-bottom: 0px;
+}
+
+
+
+#show-jobs a:focus, #show-jobs a:hover, #show-jobs a{
+    color: #555;
+}
+.pagination>.active>a, .pagination>.active>a:focus, .pagination>.active>a:hover, .pagination>.active>span, .pagination>.active>span:focus, .pagination>.active>span:hover {
+    background-color: #CE533B;
+    border-color: #CE533B;
+}
+
+.btn-primary {
+    background-color: #CE533B;
+    border-color: #CE533B;
+}
+.btn-primary:hover, .btn-primary:focus {
+    background-color: #982525;
+    border-color: #982525;
+}
+.btn-primary.disabled, .btn-primary.disabled.active, .btn-primary.disabled.focus, .btn-primary.disabled:active, .btn-primary.disabled:focus, .btn-primary.disabled:hover, .btn-primary[disabled], .btn-primary[disabled].active, .btn-primary[disabled].focus, .btn-primary[disabled]:active, .btn-primary[disabled]:focus, .btn-primary[disabled]:hover, fieldset[disabled] .btn-primary, fieldset[disabled] .btn-primary.active, fieldset[disabled] .btn-primary.focus, fieldset[disabled] .btn-primary:active, fieldset[disabled] .btn-primary:focus, fieldset[disabled] .btn-primary:hover {
+    background-color: #ce6b6b;
+    border-color: #ce6b6b;
+}
+
+.pagination {
+    clear:both;
+}
