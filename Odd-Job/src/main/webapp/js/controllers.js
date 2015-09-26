@@ -190,7 +190,7 @@ oddjobApp.controllers.controller('ProfileDetailCtrl', function($scope, $log, oau
 						if (resp.error) {
 							// The request has failed.
 							var errorMessage = resp.error.message || '';
-							$scope.messages = 'Failed to get the job : '
+							$scope.messages = 'Failed to get the profile : '
 									+ $routeParams.websafeProfileKey + ' '
 									+ errorMessage;
 							$scope.alertStatus = 'warning';

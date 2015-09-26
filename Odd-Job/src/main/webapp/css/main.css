@@ -1,6 +1,7 @@
 body{
 	background-color: #FFF;
-	color: #333333
+	color: #333333;
+	overflow-y: scroll;
 }
 #cover {
   z-index: -1;
