@@ -1,4 +1,4 @@
-<div ng-controller="JobDetailCtrl">
+<div ng-controller="ProfileDetailCtrl">
     <div class="row">
         <div class="col-lg-12">
             <div id="messages" class="alert alert-{{alertStatus}}" ng-show="messages">
@@ -13,36 +13,36 @@
     <div class="row" ng-init="init()">
         <div class="col-md-9">
             <div class="well well-sm">
-                <h2>{{job.title}}</h2>
-                <h5>{{job.description}}</h5>
+                <h2>{{profile.displayName}}</h2>
+                <h5>{{profile.phoneNumber}}</h5>
 
                 <div>
-                    <label for="poster">job Listing User: </label>
-                    <span id="poster">{{job.posterDisplayName}}</span>
+                    <label for="poster">profile Listing User: </label>
+                    <span id="poster">{{profile.posterDisplayName}}</span>
                 </div>
             </div>
             <form class="form" novalidate role="form">
                 <fieldset>
                     <div>
                         <label for="city">City: </label>
-                        <span id="city">{{job.city}}</span>
+                        <span id="city">{{profile.city}}</span>
                     </div>
                     <div>
                         <label for="state">State: </label>
-                        <span id="state">{{job.state}}</span>
+                        <span id="state">{{profile.state}}</span>
                     </div>                    <div>
                         <label for="tags">Topics: </label>
                         <span id="tags">
-                            <span ng-repeat="tag in job.tags" class="label label-primary label-separated">{{tag}}</span>
+                            <span ng-repeat="tag in profile.tags" class="label label-primary label-separated">{{tag}}</span>
                         </span>
                     </div>
                     <div>
                         <label for="postDate">Post Date: </label>
-                        <span id="postDate">{{job.postDate | date:'dd-MMMM-yyyy'}}</span>
+                        <span id="postDate">{{profile.postDate | date:'dd-MMMM-yyyy'}}</span>
                     </div>
                     <div>
                         <label for="completionDate">Complete By Date: </label>
-                        <span id="completionDate">{{job.completionDate | date:'dd-MMMM-yyyy'}}</span>
+                        <span id="completionDate">{{profile.completionDate | date:'dd-MMMM-yyyy'}}</span>
                     </div>
                 </fieldset>
             </form>

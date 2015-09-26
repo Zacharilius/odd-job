@@ -1,74 +1,74 @@
-<div ng-controller="ShowJobCtrl" ng-init="SearchByMap()">
+<div ng-controller="ShowJobCtrl" ng-init="queryJobs()">
 <div class="container">
     <div class="row">
         <div class="col-lg-12">
             <h1>Show Jobs</h1>
         </div>
     </div>
-
-    <tabset id="show-jobs" justified="true">
-        <tab select="SearchByMap()" heading="Map"></tab>
-        <tab select="SearchByList()" heading="List"></tab>
-    </tabset>
-	<div class="tab_content">
-		<div ng-show="submitted && jobs.length == 0">
-                <h4>No matching results.</h4>
-        </div>
-        <div ng-show="selectedTab == 'MAP'">
-            <div id="map"></div>
-            <div id="class" ng-repeat="marker in markers | orderBy : 'title'">
-         			<a href="#" ng-click="openInfoWindow($event, marker)">{{marker.title}}</a>
-    		</div>
-        </div>
-        <div ng-show="selectedTab == 'LIST'">      
-	       <div class="table-responsive" ng-show="jobs.length > 0">
-	       <table id="conference-table" class="table table-striped table-hover">
-	            <thead>
-	               <tr>
-	                   <th>Title</th>
-	                   <th>Pay</th>
-	                   <th>Hours</th>
-	                   <th>Post Date</th>
-	                   <th>Employer</th>
-	               </tr>
-	             </thead>
-	             <tbody>
-	                <tr ng-repeat="job in jobs | startFrom: pagination.currentPage * pagination.pageSize | limitTo: pagination.pageSize">
-	                    <td><a href="#/job/{{job.websafeKey}}">{{job.title}}</a></td>
-	                    <td>{{job.pay}}</td>
-	                    <td>{{job.hours}}</td>
-	                    <td>{{job.postDate | date:'dd-MMMM-yyyy'}}</td>
-	                    <td>{{job.posterUserId}}</td>
-	                </tr>
-	             </tbody>
-	       </table>
-	     </div>
-	     <div class="text-center">
-		<ul class="pagination" ng-show="jobs.length > 0">
-	        <li ng-class="{disabled: pagination.currentPage == 0 }">
-	            <a ng-class="{disabled: pagination.currentPage == 0 }"
-	    	    ng-click="pagination.isDisabled($event) || (pagination.currentPage = 0)">&lt&lt</a>
-	        </li>
-	        <li ng-class="{disabled: pagination.currentPage == 0 }">
-	            <a ng-class="{disabled: pagination.currentPage == 0 }"
-	               ng-click="pagination.isDisabled($event) || (pagination.currentPage = pagination.currentPage - 1)">&lt</a>
-	            </li>
-	        <!-- ng-repeat creates a new scope. Need to specify the pagination.currentPage as $parent.pagination.currentPage -->
-	        <li ng-repeat="page in pagination.pageArray()" ng-class="{active: $parent.pagination.currentPage == page}">
-	            <a ng-click="$parent.pagination.currentPage = page">{{page + 1}}</a>
-	        </li>
-			<li ng-class="{disabled: pagination.currentPage == pagination.numberOfPages() - 1}">
-	            <a ng-class="{disabled: pagination.currentPage == pagination.numberOfPages() - 1}"
-	                       ng-click="pagination.isDisabled($event) || (pagination.currentPage = pagination.currentPage + 1)">&gt</a>
-	        </li>
-	        <li ng-class="{disabled: pagination.currentPage == pagination.numberOfPages() - 1}">
-	            <a ng-class="{disabled: pagination.currentPage == pagination.numberOfPages() - 1}"
-	                       ng-click="pagination.isDisabled($event) || (pagination.currentPage = pagination.numberOfPages() - 1)">&gt&gt</a>
-	        </li>
-	     </ul>
-	     </div>
-	   </div>
-      </div>
+	<div ng-show="submitted && jobs.length == 0">
+        <h3>No matching results.</h3>
+    </div>
+    <div ng-show="submitted && jobs.length > 0">
+	    <tabset id="show-jobs" justified="true">
+	        <tab select="SearchByList()" heading="List"></tab>
+	        <tab select="SearchByMap()" heading="Map"></tab>
+	    </tabset>
+		<div class="tab_content">
+			<div ng-show="selectedTab == 'MAP'">	
+	            <div id="map"></div>
+	            <div id="class" ng-repeat="marker in markers | orderBy : 'title'">
+	         			<a href="#" ng-click="openInfoWindow($event, marker)">{{marker.title}}</a>
+	    		</div>
+	        </div>
+	        <div ng-show="selectedTab == 'LIST'">      
+		       <div class="table-responsive" ng-show="jobs.length > 0">
+		       <table id="job-table" class="table table-striped table-hover">
+		            <thead>
+		               <tr>
+		                   <th>Post Date</th>
+		                   <th>Title</th>
+		                   <th>Total Pay</th>
+		                   <th>Poster</th>
+		                   <th>Tags</th>
+		               </tr>
+		             </thead>
+		             <tbody>
+		                <tr ng-repeat="job in jobs | startFrom: pagination.currentPage * pagination.pageSize | limitTo: pagination.pageSize">
+		                    <td>{{job.postDate | date:'dd-MMMM-yyyy'}}</td>
+		                    <td><a href="#/job/{{job.websafeKey}}">{{job.title}}</a></td>
+		                    <td>{{job.pay * job.hours | currency}}</td>
+		                    <td><a href="#/profile/{{job.websafeProfileKey}}">{{job.websafeProfileKey}}</a></td>
+		                    <td><span ng-repeat="tag in jobs.tags"> {{tag}}</span></td>
+		                </tr>
+		             </tbody>
+		       </table>
+		     </div>
+		     <div class="text-center">
+			<ul class="pagination" ng-show="jobs.length > 0">
+		        <li ng-class="{disabled: pagination.currentPage == 0 }">
+		            <a ng-class="{disabled: pagination.currentPage == 0 }"
+		    	    ng-click="pagination.isDisabled($event) || (pagination.currentPage = 0)">&lt&lt</a>
+		        </li>
+		        <li ng-class="{disabled: pagination.currentPage == 0 }">
+		            <a ng-class="{disabled: pagination.currentPage == 0 }"
+		               ng-click="pagination.isDisabled($event) || (pagination.currentPage = pagination.currentPage - 1)">&lt</a>
+		            </li>
+		        <!-- ng-repeat creates a new scope. Need to specify the pagination.currentPage as $parent.pagination.currentPage -->
+		        <li ng-repeat="page in pagination.pageArray()" ng-class="{active: $parent.pagination.currentPage == page}">
+		            <a ng-click="$parent.pagination.currentPage = page">{{page + 1}}</a>
+		        </li>
+				<li ng-class="{disabled: pagination.currentPage == pagination.numberOfPages() - 1}">
+		            <a ng-class="{disabled: pagination.currentPage == pagination.numberOfPages() - 1}"
+		                       ng-click="pagination.isDisabled($event) || (pagination.currentPage = pagination.currentPage + 1)">&gt</a>
+		        </li>
+		        <li ng-class="{disabled: pagination.currentPage == pagination.numberOfPages() - 1}">
+		            <a ng-class="{disabled: pagination.currentPage == pagination.numberOfPages() - 1}"
+		                       ng-click="pagination.isDisabled($event) || (pagination.currentPage = pagination.numberOfPages() - 1)">&gt&gt</a>
+		        </li>
+		     </ul>
+		     </div>
+	   		</div>
+      	</div>
 
     </div>
 </div>

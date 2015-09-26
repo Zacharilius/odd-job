@@ -83,3 +83,10 @@ body{
 .profile-jobs{
 	margin-top: 100px;
 }
+
+.repeat-job{
+	background-color: #F8F8FF;
+	padding: 15px 15px 50px 15px;
+	margin-bottom: 15px;
+	border-radius: 25px;
+}

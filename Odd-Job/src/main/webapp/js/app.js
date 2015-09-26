@@ -16,12 +16,16 @@ var app = angular.module('oddjobApp',
     config(['$routeProvider',
         function ($routeProvider) {
             $routeProvider.
-                when('/profile', {
+	            when('/profile/:websafeProfileKey', {
+	                templateUrl: '/partials/profile_detail.html',
+	                controller: 'ProfileDetailCtrl'
+	            }).                
+	            when('/profile', {
                     templateUrl: '/partials/profile.html',
-                    controller: 'MyProfileCtrl'
+                    controller: 'ProfileCtrl'
                 }).
-                when('/job/create', {
-                    templateUrl: '/partials/create_job.html',
+                when('/job/post', {
+                    templateUrl: '/partials/post_job.html',
                     controller: 'JobCtrl'
                 }).
                 when('/job/:websafeJobKey', {

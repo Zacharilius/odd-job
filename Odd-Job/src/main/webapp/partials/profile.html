@@ -1,4 +1,4 @@
-<div ng-controller="MyProfileCtrl" ng-init="init()">
+<div ng-controller="ProfileCtrl" ng-init="init()">
 
 	<img class="spinner" src="/img/ajax-loader.gif" ng-show="loading"/>
 	<div class="container">
@@ -29,8 +29,8 @@
 						<span class="label label-warning" ng-show="profile.phoneNumber != initialProfile.phoneNumber"> Changed</span>
 						<input id="phoneNumber" type="text" name="phoneNumber" ng-model="profile.phoneNumber" class="form-control" maxlength="15"/>
 					</div>
-					<button ng-click="saveProfile(profileForm)" class="btn btn-primary" ng-disabled="loading">Update profile </button>
-				</form>						
+					<button ng-click="saveProfile(profileForm)" class="pull-right btn btn-primary" ng-disabled="loading">Update profile </button>
+				</form>	
 			</div>
 
 		</div>
@@ -50,28 +50,44 @@
 		    		</div>
 		        </div>
 		        <div ng-show="selectedTab == 'LIST'">      
-			       <div class="table-responsive" ng-show="jobs.length > 0">
-			       <table id="conference-table" class="table table-striped table-hover">
-			            <thead>
-			               <tr>
-			                   <th>Title</th>
-			                   <th>Pay</th>
-			                   <th>Hours</th>
-			                   <th>Post Date</th>
-			                   <th>Employer</th>
-			               </tr>
-			             </thead>
-			             <tbody>
-			                <tr ng-repeat="job in jobs">
-			                    <td><a href="#/job/{{job.websafeKey}}">{{job.title}}</a></td>
-			                    <td>{{job.pay}}</td>
-			                    <td>{{job.hours}}</td>
-			                    <td>{{job.postDate | date:'dd-MMMM-yyyy'}}</td>
-			                    <td>{{job.posterUserId}}</td>
-			                </tr>
-			             </tbody>
-			       </table>
-			      </div>
+					<h1>Refresh, Update, or Delete jobs</h1>
+            		<div ng-repeat="job in jobs" class="repeat-job">
+			           <form name="jobForm" novalidate role="form">
+			           		<h2>Job {{$index}}</h2>
+			                <div class="form-group" ng-class="{'has-warning': jobs[$index].title != initialJobs[$index].title}">
+			                    <label for="title">Title </label>
+			                    <span class="label label-warning" ng-show='jobs[$index].title != initialJobs[$index].title'> Changed</span>
+			                    <input id="title" type="text" name="title" ng-model="job.title" class="form-control"/>
+			                </div>
+			                <div class="form-group" ng-class="{'has-warning': jobs[$index].description != initialJobs[$index].description}">
+			                    <label for="description">description </label>
+			                    <span class="label label-warning" ng-show='jobs[$index].description != initialJobs[$index].description'> Changed</span>
+			                    <input id="description" type="text" name="description" ng-model="job.description" class="form-control"/>
+			                </div>
+			                <div class="form-group" ng-class="{'has-warning': jobs[$index].JobHours != initialJobs[$index].JobHours}">
+			                    <label for="JobHours">JobHours </label>
+			                    <span class="label label-warning" ng-show='jobs[$index].JobHours != initialJobs[$index].JobHours'> Changed</span>
+			                    <input id="JobHours" type="text" name="JobHours" ng-model="job.JobHours" class="form-control"/>
+			                </div>			                
+			                <div class="form-group" ng-class="{'has-warning': jobs[$index].jobPay != initialJobs[$index].jobPay}">
+			                    <label for="jobPay">jobPay </label>
+			                    <span class="label label-warning" ng-show='jobs[$index].jobPay != initialJobs[$index].jobPay'> Changed</span>
+			                    <input id="jobPay" type="text" name="jobPay" ng-model="job.jobPay" class="form-control"/>
+			                </div>
+	                
+			                <div class="pull-right">             
+				                <button ng-click="refreshJob(job, $index)" class="btn btn-primary"
+				                        ng-disabled="loading">Refresh
+				                </button>			                
+				                <button ng-click="deleteJob(job, $index)" class="btn btn-primary"
+				                        ng-disabled="loading">Delete
+				                </button>
+				                <button ng-click="updateJob(job, $index)" class="btn btn-primary"
+				                        ng-disabled="loading">Update
+				                </button>
+			                </div>  
+			            </form>   
+            		</div>		
 				</div>
 			</div>
     	</div>

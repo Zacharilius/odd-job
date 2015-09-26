@@ -10,6 +10,7 @@
 		</div>
 		<div class="RSDFSDASSFDASDFSAD container">
             <h3>Post a Job</h3>
+            <p>Add a new job to Odd-Job</p>
             <form name="jobForm" novalidate role="form">
                 <div class="form-group">
                     <label for="name">Title <span class="required">*</span></label>
@@ -20,8 +21,8 @@
                 </div>
                 <div class="form-group">
                     <label for="description">Description <span class="required">*</span></label>
-                    <textarea id="description" type="text" name="description" ng-model="job.description"
-                              class="form-control"></textarea>
+					<span class="label label-danger" ng-show="jobForm.description.$error.required">Required!</span>                    
+					<textarea id="description" type="text" name="description" ng-model="job.description" class="form-control"  ng-required="true"></textarea>
                 </div>
                 <div class="form-group">
                     <label for="city">City</label>
@@ -49,7 +50,7 @@
 				</div>
                 <div class="form-group">
                     <label for="tags">Tags</label>
-                    <select id="tags" ng-model="jobs.tags" name="tags"
+                    <select id="tags" ng-model="job.tags" name="tags"
                             ng-options="tag for tag in tags"
                             class="form-control" multiple>
                     </select>

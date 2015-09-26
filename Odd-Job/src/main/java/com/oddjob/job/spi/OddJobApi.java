@@ -125,7 +125,6 @@ public class OddJobApi {
             throw new UnauthorizedException("Authorization required");
         }
 
-        // TODO
         // load the Profile Entity
         String userId = user.getUserId();
         Key key = Key.create(Profile.class, userId);
@@ -133,6 +132,40 @@ public class OddJobApi {
         Profile profile = (Profile) ofy().load().key(key).now();
         return profile;
     }
+    
+    /**
+     * Returns a Profile object associated with the given user object. The cloud
+     * endpoints system automatically inject the User object.
+     *
+     * @param user
+     *            A User object injected by the cloud endpoints.
+     * @return Profile object.
+     * @throws UnauthorizedException
+     *             when the User object is null.
+     */
+    @ApiMethod(
+    		name = "getProfileDetail", 
+    		path = "profile/{websafeProfileKey}", 
+    		httpMethod = HttpMethod.GET
+    		)
+    public Profile getProfileDetail(final User user, 
+    		@Named("websafeProfileKey") final String websafeProfileKey) throws UnauthorizedException {
+        System.out.println("Pow");
+    	if (user == null) {
+            throw new UnauthorizedException("Authorization required to view profiles");
+        }
+        System.out.println("\n\nwebsafeProfileKey" + websafeProfileKey + "\n\n");
+        // load the Profile Entity from the websafeProfileKey
+        String userId = user.getUserId();
+        Key key = Key.create(websafeProfileKey);
+
+        Profile profile = (Profile) ofy().load().key(key).now();
+        return profile;
+    }   
+    
+    
+    
+    
     /**
      * Gets the Profile entity for the current user
      * or creates it if it doesn't exist
@@ -222,6 +255,12 @@ public Job createJob(final User user, final JobForm jobForm)
     final long jobId = jobKey.getId();
     final Queue queue = QueueFactory.getDefaultQueue();
     
+    if(jobForm.getTags() == null){
+    	System.out.println("It's null woops");
+    }
+    else{
+    	System.out.println("\n\n" + jobForm.getTags().toString() +"\n\n");
+    }
     // Start transactions
     Job job = ofy().transact(new Work<Job>(){
     	@Override

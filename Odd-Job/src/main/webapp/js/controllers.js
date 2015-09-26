@@ -23,12 +23,13 @@ oddjobApp.controllers = angular
  * 
  * @description A controller used for the My Profile page.
  */
-oddjobApp.controllers.controller('MyProfileCtrl', function($scope, $log,
+oddjobApp.controllers.controller('ProfileCtrl', function($scope, $log,
 		oauth2Provider, HTTP_ERRORS, $rootScope) {
 	
 	$scope.receivedJobs = false;
 	$scope.loading = false;
 	$scope.selectedTab == 'MAP';
+	
 	/*
 	 * The initial profile retrieved from the server to know the dirty state.
 	 * 
@@ -42,18 +43,21 @@ oddjobApp.controllers.controller('MyProfileCtrl', function($scope, $log,
 	$scope.initialJobs = {};
 	
 	/**
-	 * Sets the selected tab to 'ALL'
+	 * Sets the selected tab to 'MAP'
 	 */
 	$scope.SearchByMap = function() {
 		$scope.selectedTab = 'MAP';
 	};
 
 	/**
-	 * Sets the selected tab to 'YOU_HAVE_CREATED'
+	 * Sets the selected tab to 'LIST'
 	 */
 	$scope.SearchByList = function() {
 		$scope.selectedTab = 'LIST';
 	};
+	
+	$scope.formNotReady = function(){
+	}
 	/**
 	 * Initializes the My profile page. Update the profile if the user's profile
 	 * has been stored.
@@ -158,7 +162,50 @@ oddjobApp.controllers.controller('MyProfileCtrl', function($scope, $log,
 				});
 	};
 });
+/**
+ * @ngdoc controller
+ * @name ProfileDetailCtrl
+ * 
+ * @description A controller used for the profile detail page.
+ */
+oddjobApp.controllers.controller('ProfileDetailCtrl', function($scope, $log, oauth2Provider,
+		$routeParams, HTTP_ERRORS) {
+	$scope.profile = {};
 
+	$scope.isUserAttending = false;
+
+	/**
+	 * Initializes the oddjob detail page. Invokes the oddjob.getoddjob method
+	 * and sets the returned oddjob in the $scope.
+	 * 
+	 */
+	$scope.init = function() {
+		$scope.loading = true;
+		gapi.client.oddjob.getProfileDetail({
+			websafeProfileKey : $routeParams.websafeProfileKey
+		}).execute(
+				function(resp) {
+					$scope.$apply(function() {
+						$scope.loading = false;
+						if (resp.error) {
+							// The request has failed.
+							var errorMessage = resp.error.message || '';
+							$scope.messages = 'Failed to get the job : '
+									+ $routeParams.websafeProfileKey + ' '
+									+ errorMessage;
+							$scope.alertStatus = 'warning';
+							$log.error($scope.messages);
+						} else {
+							// The request has succeeded.
+							$scope.alertStatus = 'success';
+							console.log(resp.result);
+							$scope.profile = resp.result;
+						}
+					});
+				});
+	};
+
+});
 /**
  * @ngdoc controller
  * @name RootCtrl
@@ -348,6 +395,10 @@ oddjobApp.controllers.controller('JobCtrl', function($scope, $log,
 
 	$scope.states = formInformation.states;
 	
+	$scope.job.pay = 0;
+	
+	$scope.job.hours = 0;
+	
 	
 	$scope.job.latitude = 47.6097;
 	$scope.job.longitude = -122.3331;
@@ -416,6 +467,7 @@ oddjobApp.controllers.controller('JobCtrl', function($scope, $log,
 		$scope.job.latitude = $scope.jobMarker.position.H;
 		$scope.job.longitude = $scope.jobMarker.position.L;
 		$scope.loading = true;
+		console.log($scope.job);
 		gapi.client.oddjob.createJob($scope.job).execute(
 				function(resp) {
 					$scope.$apply(function() {
@@ -469,7 +521,7 @@ oddjobApp.controllers.controller('ShowJobCtrl', function($scope, $log,
 	 */
 	$scope.submitted = false;
 
-	$scope.selectedTab = 'MAP';
+	$scope.selectedTab = 'LIST';
 
 	/**
 	 * Map displaying all jobs
@@ -525,19 +577,17 @@ oddjobApp.controllers.controller('ShowJobCtrl', function($scope, $log,
 	$scope.job = [];
 
 	/**
-	 * Sets the selected tab to 'ALL'
+	 * Sets the selected tab to 'MAP'
 	 */
 	$scope.SearchByMap = function() {
 		$scope.selectedTab = 'MAP';
-		$scope.queryJobs();
 	};
 
 	/**
-	 * Sets the selected tab to 'YOU_HAVE_CREATED'
+	 * Sets the selected tab to 'LIST'
 	 */
 	$scope.SearchByList = function() {
 		$scope.selectedTab = 'LIST';
-		$scope.queryJobs();
 	};
 
 	/**
@@ -591,16 +641,16 @@ oddjobApp.controllers.controller('ShowJobCtrl', function($scope, $log,
 	$scope.queryJobs = function() {
 		$scope.submitted = false;
 		if ($scope.selectedTab == 'MAP') {
-			$scope.queryoddjobsAll();
+			$scope.queryAllJobs();
 		} else if ($scope.selectedTab == 'LIST') {
-			$scope.queryoddjobsAll();
+			$scope.queryAllJobs();
 		}
 	};
 
 	/**
 	 * Invokes the oddjob.queryoddjobs API.
 	 */
-	$scope.queryoddjobsAll = function() {
+	$scope.queryAllJobs = function() {
 		$scope.loading = true;
 		gapi.client.oddjob.getAllJobsCreated().execute(function(resp) {
 			$scope.$apply(function() {
@@ -612,11 +662,10 @@ oddjobApp.controllers.controller('ShowJobCtrl', function($scope, $log,
 					$scope.alertStatus = 'warning';
 				} else {
 					// The request has succeeded.
-					$scope.submitted = false;
 					$scope.messages = 'Query succeeded : ';
 					$scope.alertStatus = 'success';
 					$log.info($scope.messages);
-
+					console.log(resp.items);
 					$scope.jobs = [];
 					$scope.markers = [];
 					angular.forEach(resp.items, function(job) {
@@ -666,6 +715,7 @@ oddjobApp.controllers.controller('JobDetailCtrl', function($scope, $log,
 						} else {
 							// The request has succeeded.
 							$scope.alertStatus = 'success';
+							console.log(resp.result);
 							$scope.job = resp.result;
 						}
 					});

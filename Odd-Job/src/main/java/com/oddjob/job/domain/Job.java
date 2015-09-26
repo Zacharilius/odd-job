@@ -1,5 +1,10 @@
 package com.oddjob.job.domain;
 
+import static com.oddjob.job.service.OfyService.ofy;
+
+
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -36,6 +41,7 @@ public class Job {
      * The description of the job.
      */
     private String description;
+    
 
     /**
      * Holds Profile key as the parent. The key belongs to the person posting the job.
@@ -111,6 +117,9 @@ public class Job {
         this.profileKey = Key.create(Profile.class, posterUserId);
         this.posterUserId = posterUserId;
         this.postDate = new Date();
+        
+        List<String> tags = jobForm.getTags();
+        this.tags = tags == null || tags.isEmpty() ? new ArrayList<String>(Arrays.asList("Something Else")) : tags;
         updateJobForm(jobForm);
     }
     /**
@@ -160,7 +169,9 @@ public class Job {
 	public Key<Profile> getProfileKey() {
 		return profileKey;
 	}
-
+	public String getWebsafeProfileKey(){
+        return profileKey.getString();
+	}
 	/**
 	 * @return the posterUserId
 	 */
@@ -220,5 +231,14 @@ public class Job {
     // Get a String version of the key
     public String getWebsafeKey() {
         return Key.create(profileKey, Job.class, id).getString();
+    }
+    
+    public String getPosterDisplayName(){
+    	Profile poster = ofy().load().key(getProfileKey()).now();
+    	if(poster == null){
+    		return posterUserId;
+    	}
+    	return poster.getDisplayName();
+    	
     }
 }
