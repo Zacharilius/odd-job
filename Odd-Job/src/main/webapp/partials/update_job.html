@@ -1,0 +1,104 @@
+<div ng-controller="JobUpdateCtrl">
+    <div class="row">
+        <div class="col-lg-12">
+            <div id="messages" class="alert alert-{{alertStatus}}" ng-show="messages">
+                <span ng-bind="messages"></span>
+                <i class="dismiss-messages pull-right glyphicon glyphicon-remove" ng-click="messages = ''"
+                   ng-show="messages"></i>
+            </div>
+            <img class="spinner" src="/img/ajax-loader.gif" ng-show="loading"/>
+        </div>
+    </div>
+    <div class="row" ng-init="init()">
+    	<div class="col-lg-12">
+    		<h1>Refresh, Update, or Delete jobs</h1>
+    	</div>
+    	<div class="col-lg-2"></div>
+    	<div class="col-lg-8">
+    		<div class="col-lg-6">
+				<div class="form-group">
+					<label for="map">Where's the work being done</label>
+					<div id="map"></div>
+				</div>
+			</div>
+    		<div class="col-lg-6">
+    			<form name="jobForm" novalidate role="form">
+					<div class="form-group" ng-class="{'has-warning': jobs[$index].title != initialJobs[$index].title}">
+						<label for="title">Title </label>
+						<span class="label label-warning" ng-show='jobs[$index].title != initialJobs[$index].title'> Changed</span>
+						<input id="title" type="text" name="title" ng-model="job.title" class="form-control"/>
+					</div>
+					<div class="form-group" ng-class="{'has-warning': jobs[$index].description != initialJobs[$index].description}">
+						<label for="description">description </label>
+						<span class="label label-warning" ng-show='jobs[$index].description != initialJobs[$index].description'> Changed</span>
+						<input id="description" type="text" name="description" ng-model="job.description" class="form-control"/>
+					</div>
+					<div class="form-group" ng-class="{'has-warning': jobs[$index].JobHours != initialJobs[$index].JobHours}">
+						<label for="JobHours">JobHours </label>
+						<span class="label label-warning" ng-show='jobs[$index].JobHours != initialJobs[$index].JobHours'> Changed</span>
+						<input id="JobHours" type="text" name="JobHours" ng-model="job.JobHours" class="form-control"/>
+					</div>			                
+					<div class="form-group" ng-class="{'has-warning': jobs[$index].jobPay != initialJobs[$index].jobPay}">
+						<label for="jobPay">jobPay </label>
+						<span class="label label-warning" ng-show='jobs[$index].jobPay != initialJobs[$index].jobPay'> Changed</span>
+						<input id="jobPay" type="text" name="jobPay" ng-model="job.jobPay" class="form-control"/>
+					</div>
+					<div class="form-group">
+	                    <label for="city">City</label>
+	                    <select id="city" ng-model="job.city" name="city" ng-options="city for city in cities"
+	                            class="form-control">
+	                    </select>
+                	</div>
+                    <div class="form-group">
+	                    <label for="state">State</label>
+	                    <select id="state" ng-model="job.state" name="state" ng-options="state for state in states"
+	                            class="form-control">
+	                    </select>
+                	</div>
+					<div class="form-group">
+						<label for="hours">How many work hours</label>
+	  					<input id = "hours" name = "hours" ng-model="job.hours" type="number" min="0" step=".5">
+					</div>
+					<div class="form-group">
+						<label for="pay">Pay per hour</label>
+	  					<input id = "pay" name = "pay" ng-model="job.pay" type="number" min="0.00" step="0.25">
+					</div>
+	                <div class="form-group">
+	                    <label for="tags">Tags</label>
+	                    <select id="tags" ng-model="job.tags" name="tags"
+	                            ng-options="tag for tag in tags"
+	                            class="form-control" multiple>
+	                    </select>
+	                </div>
+
+	                <div class="form-group" ng-controller="DatepickerCtrl">
+	                    <label for="startDate">Complete By Date</label>
+	                    <span class="label label-danger" ng-show="!isValidDates()">Complete by Date must be later or equal today's date</span>
+	                    <p class="input-group">
+	                        <input id="startDate" type="text" class="form-control" datepicker-popup="{{format}}"
+	                               ng-model="job.completionDate" is-open="opened"
+	                               datepicker-options="dateOptions"
+	                               close-text="Close"/>
+	                    <span class="input-group-btn">
+	                        <button class="btn btn-default" ng-click="open($event)"><i
+	                                class="glyphicon glyphicon-calendar"></i>
+	                        </button>
+	                    </span>
+	                    </p>
+	                </div>				
+					<div class="pull-right">             
+						<button ng-click="refreshJob(job, $index)" class="btn btn-primary"
+							ng-disabled="loading">Refresh
+						</button>			                
+						<button ng-click="deleteJob(job, $index)" class="btn btn-primary"
+							ng-disabled="loading">Delete
+						</button>
+						<button ng-click="updateJob(job, $index)" class="btn btn-primary"
+							ng-disabled="loading">Update
+						</button>
+					</div>  
+				</form>
+			</div>
+    	</div>
+	</div>
+</div>

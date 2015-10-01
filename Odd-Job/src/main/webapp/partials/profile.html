@@ -1,5 +1,4 @@
 <div ng-controller="ProfileCtrl" ng-init="init()">
-
 	<img class="spinner" src="/img/ajax-loader.gif" ng-show="loading"/>
 	<div class="container">
 		<h3>Hello {{profile.displayName}}</h3>
@@ -35,61 +34,29 @@
 
 		</div>
 		<div class="profile-jobs">
-			<div ng-show="jobs.length == 0 && receivedJobs">
-	                <h3>No matching results.</h3>
-	        </div>
-			<div ng-show="jobs.length > 0 && receivedJobs">
-			    <tabset id="show-jobs" justified="true">
-			        <tab select="SearchByMap()" heading="Map"></tab>
-			        <tab select="SearchByList()" heading="List"></tab>
-	    		</tabset>
-				<div ng-show="selectedTab == 'MAP'">
-		            <div id="map"></div>
-		            <div id="class" ng-repeat="marker in markers | orderBy : 'title'">
-		         			<a href="#" ng-click="openInfoWindow($event, marker)">{{marker.title}}</a>
-		    		</div>
-		        </div>
-		        <div ng-show="selectedTab == 'LIST'">      
-					<h1>Refresh, Update, or Delete jobs</h1>
-            		<div ng-repeat="job in jobs" class="repeat-job">
-			           <form name="jobForm" novalidate role="form">
-			           		<h2>Job {{$index}}</h2>
-			                <div class="form-group" ng-class="{'has-warning': jobs[$index].title != initialJobs[$index].title}">
-			                    <label for="title">Title </label>
-			                    <span class="label label-warning" ng-show='jobs[$index].title != initialJobs[$index].title'> Changed</span>
-			                    <input id="title" type="text" name="title" ng-model="job.title" class="form-control"/>
-			                </div>
-			                <div class="form-group" ng-class="{'has-warning': jobs[$index].description != initialJobs[$index].description}">
-			                    <label for="description">description </label>
-			                    <span class="label label-warning" ng-show='jobs[$index].description != initialJobs[$index].description'> Changed</span>
-			                    <input id="description" type="text" name="description" ng-model="job.description" class="form-control"/>
-			                </div>
-			                <div class="form-group" ng-class="{'has-warning': jobs[$index].JobHours != initialJobs[$index].JobHours}">
-			                    <label for="JobHours">JobHours </label>
-			                    <span class="label label-warning" ng-show='jobs[$index].JobHours != initialJobs[$index].JobHours'> Changed</span>
-			                    <input id="JobHours" type="text" name="JobHours" ng-model="job.JobHours" class="form-control"/>
-			                </div>			                
-			                <div class="form-group" ng-class="{'has-warning': jobs[$index].jobPay != initialJobs[$index].jobPay}">
-			                    <label for="jobPay">jobPay </label>
-			                    <span class="label label-warning" ng-show='jobs[$index].jobPay != initialJobs[$index].jobPay'> Changed</span>
-			                    <input id="jobPay" type="text" name="jobPay" ng-model="job.jobPay" class="form-control"/>
-			                </div>
-	                
-			                <div class="pull-right">             
-				                <button ng-click="refreshJob(job, $index)" class="btn btn-primary"
-				                        ng-disabled="loading">Refresh
-				                </button>			                
-				                <button ng-click="deleteJob(job, $index)" class="btn btn-primary"
-				                        ng-disabled="loading">Delete
-				                </button>
-				                <button ng-click="updateJob(job, $index)" class="btn btn-primary"
-				                        ng-disabled="loading">Update
-				                </button>
-			                </div>  
-			            </form>   
-            		</div>		
-				</div>
-			</div>
+			<div class="job-table">
+				<table class="table">
+					<h1>Jobs's you've posted</h1>
+					<caption>Click Details to Update a Job</caption>
+					<thead>
+						<tr>
+							<th>#</th>
+							<th>Title</th>
+							<th>Description</th>
+							<th>Update</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="job in jobs">
+							<th scope="row">{{$index + 1}}</th>
+							<td>{{job.title}}</td>
+							<td>{{job.description}}</td>
+							<td><a href="#/profile/job/{{job.websafeJobKey}}">Job Details</a></td>
+						</tr>
+	      			</tbody>
+	    		</table>
+    		</div>	
+			</div> 
     	</div>
 	</div>
 </div>

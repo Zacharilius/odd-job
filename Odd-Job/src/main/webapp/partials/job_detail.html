@@ -1,4 +1,4 @@
-<div ng-controller="JobDetailCtrl">
+<div class="container" ng-controller="JobDetailCtrl">
     <div class="row">
         <div class="col-lg-12">
             <div id="messages" class="alert alert-{{alertStatus}}" ng-show="messages">
@@ -11,41 +11,48 @@
     </div>
 
     <div class="row" ng-init="init()">
-        <div class="col-md-9">
+        <div class="col-md-6">
             <div class="well well-sm">
                 <h2>{{job.title}}</h2>
                 <h5>{{job.description}}</h5>
-
-                <div>
-                    <label for="poster">job Listing User: </label>
-                    <span id="poster">{{job.posterDisplayName}}</span>
-                </div>
-            </div>
-            <form class="form" novalidate role="form">
-                <fieldset>
-                    <div>
-                        <label for="city">City: </label>
-                        <span id="city">{{job.city}}</span>
-                    </div>
-                    <div>
-                        <label for="state">State: </label>
-                        <span id="state">{{job.state}}</span>
-                    </div>                    <div>
-                        <label for="tags">Topics: </label>
-                        <span id="tags">
-                            <span ng-repeat="tag in job.tags" class="label label-primary label-separated">{{tag}}</span>
-                        </span>
-                    </div>
-                    <div>
-                        <label for="postDate">Post Date: </label>
-                        <span id="postDate">{{job.postDate | date:'dd-MMMM-yyyy'}}</span>
-                    </div>
-                    <div>
-                        <label for="completionDate">Complete By Date: </label>
-                        <span id="completionDate">{{job.completionDate | date:'dd-MMMM-yyyy'}}</span>
-                    </div>
-                </fieldset>
-            </form>
+                <div ng-show="job.posterDisplayName">
+                    <label for="poster">Job Posting User: </label>
+		            <span id="poster"><a href = "#/profile/{{job.websafeProfileKey}}">{{job.posterDisplayName}}</span></a>
+		        </div>   	
+				<div ng-show="job.city">
+					<label for="city">City, State: </label>
+					<span id="city">{{job.city}}</span>
+				</div>
+				<div ng-show="job.state">
+					<label for="state">State: </label>
+					<span id="state">{{job.state}}</span>
+				</div>                    
+				<div ng-show="job.tags">
+					<label for="tags">Topics: </label>
+					<span id="tags">
+						<span ng-repeat="tag in job.tags" class="label label-primary label-separated">{{tag}}</span>
+					</span>
+				</div>
+				<div ng-show="job.postDate">
+					<label for="postDate">Post Date: </label>
+					<span id="postDate">{{job.postDate | date:'dd-MMMM-yyyy'}}</span>
+				</div>
+				<div ng-show="job.completionDate">
+					<label for="completionDate">Complete By Date: </label>
+					<span id="completionDate">{{job.completionDate | date:'dd-MMMM-yyyy'}}</span>
+				</div>
+				<div ng-show="job.pay">
+					<label for="pay">Pay per hour: </label>
+					<span id="pay">{{job.pay | currency}}</span>
+				</div>
+				<div ng-show="job.hours">
+					<label for="hours">Hours: </label>
+					<span id="hours">{{job.hours}}</span>
+				</div>                      
+			</div>
+		</div>
+        <div class="col-md-6">
+        	<div id="map"></div>
         </div>
     </div>
 </div>

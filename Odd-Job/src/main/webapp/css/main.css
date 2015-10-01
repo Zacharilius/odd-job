@@ -70,8 +70,8 @@ body{
 #map{
 	height: 500px;
 	width: 100%;
-	margin-top: 10px;
 	margin-bottom: 10px;
+	background-color: red;
 }
 
 
@@ -90,4 +90,12 @@ body{
 	padding: 15px 15px 50px 15px;
 	margin-bottom: 15px;
 	border-radius: 25px;
+}
+.job-table{
+	border-style: solid;
+	border-color: #ddd;
+    border-width: 1px;
+    border-radius: 4px 4px 0 0;
+    -webkit-box-shadow: none;
+    box-shadow: none;
 }

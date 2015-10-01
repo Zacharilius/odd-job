@@ -196,14 +196,14 @@ public class Job {
 	/**
 	 * @return the jobHours
 	 */
-	public double getJobHours() {
+	public double getHours() {
 		return hours;
 	}
 
 	/**
 	 * @return the jobPay
 	 */
-	public double getJobPay() {
+	public double getPay() {
 		return pay;
 	}
 
@@ -228,8 +228,10 @@ public class Job {
 	public double getLongitude(){
 		return longitude;
 	}
-    // Get a String version of the key
-    public String getWebsafeKey() {
+    /*
+     *  Get a String version of the jobkey
+     */
+    public String getWebsafeJobKey() {
         return Key.create(profileKey, Job.class, id).getString();
     }
     

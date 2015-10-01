@@ -515,6 +515,24 @@ oddjobApp.controllers.controller('ShowJobCtrl', function($scope, $log,
 	$scope.jobs = [];
 
 	/**
+	 * Variable that holds the column filter
+	 */
+	$scope.columnFilter = "postDate"
+		
+	$scope.orderFilter = function(newFilter){
+		console.log('_' + $scope.columnFilter + '_, _' + newFilter + '_');
+		if(newFilter === $scope.columnFilter){
+			$scope.columnFilter = "-" + newFilter;
+			console.log("colFilter: " + $scope.columnFilter);
+		}
+		else{
+			console.log("newFilter: " + newFilter);
+			$scope.columnFilter = newFilter;
+			console.log("else: " + $scope.columnFilter);
+		}
+
+	}
+	/**
 	 * Holds the status if the query is being executed.
 	 * 
 	 * @type {boolean}
@@ -669,6 +687,7 @@ oddjobApp.controllers.controller('ShowJobCtrl', function($scope, $log,
 					$scope.jobs = [];
 					$scope.markers = [];
 					angular.forEach(resp.items, function(job) {
+						job.totalPay = job.pay * job.hours;
 						$scope.jobs.push(job);
 						createMarker(job);
 					});

@@ -19,7 +19,11 @@ var app = angular.module('oddjobApp',
 	            when('/profile/:websafeProfileKey', {
 	                templateUrl: '/partials/profile_detail.html',
 	                controller: 'ProfileDetailCtrl'
-	            }).                
+	            }).    
+	            when('/profile/job/:websafeJobKey', {
+	                templateUrl: '/partials/update_job.html',
+	                controller: 'JobUpdateCtrl'
+	            }). 	            
 	            when('/profile', {
                     templateUrl: '/partials/profile.html',
                     controller: 'ProfileCtrl'
@@ -84,17 +88,25 @@ app.constant('formInformation',{
 	      			'Issaquah', 'Medina', 'Mercer Island', 'Newcastle', 'Sammamish',
 	      			'Woodinville', 'Bothell', 'Edmonds', 'Kenmore', 'Lake Forest Park',
 	      			'Shoreline', 'Kirkland', 'Renton' ],
-	states: [ 'Washington' ]
-
+	states: [ 'Washington' ],
+	tags: [ 'Construction', 'Moving Help', 'Web Development',
+			'Sign Holding', 'Cleaning', 'Lawn Mowing', 'Pet Sitting',
+			'Something Else']
 });
 
 /**
  * 
  */
-app.factory('jobProvider', function(){
+app.service('jobProvider', function(){
 	
 });
 
+/**
+ * 
+ */
+app.service('mapProvider', function(){
+	
+});
 
 
 /**
