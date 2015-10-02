@@ -1,62 +1,63 @@
 <div ng-controller="ProfileCtrl" ng-init="init()">
-	<img class="spinner" src="/img/ajax-loader.gif" ng-show="loading"/>
 	<div class="container">
-		<h3>Hello {{profile.displayName}}</h3>
-		<div class="profile-container clearfix">
-			<div class="profile-picture pull-right">
-				<img ng-src="{{profile.pictureUrl}}" class=" img-responsive"/>	
-			</div>
-			<div class="profile-information">
-				<form name="profileForm" novalidate role="form">
-					<div class="form-group" ng-class="{'has-warning': profile.displayName != initialProfile.displayName}">
-						<label for="displayName">Display Name </label>
-						<span class="label label-warning" ng-show="profile.displayName != initialProfile.displayName"> Changed</span>
-						<input id="displayName" type="text" name="displayName" ng-model="profile.displayName" class="form-control" maxlength="30"/>
-					</div>
-					<div class="form-group" ng-class="{'has-warning': profile.city != initialProfile.city}">
-						<label for="city">City </label>
-						<span class="label label-warning" ng-show="profile.city != initialProfile.city"> Changed</span>
-						<input id="city" type="text" name="city" ng-model="profile.city" class="form-control" maxlength="30"/>
-					</div>
-					<div class="form-group" ng-class="{'has-warning': profile.state != initialProfile.state}">
-						<label for="state">State </label>
-						<span class="label label-warning" ng-show="profile.state != initialProfile.state"> Changed</span>
-						<input id="state" type="text" name="state" ng-model="profile.state" class="form-control" maxlength="30"/>
-					</div>
-					<div class="form-group" ng-class="{'has-warning': profile.phoneNumber != initialProfile.phoneNumber}">
-						<label for="phoneNumber">Phone Number </label>
-						<span class="label label-warning" ng-show="profile.phoneNumber != initialProfile.phoneNumber"> Changed</span>
-						<input id="phoneNumber" type="text" name="phoneNumber" ng-model="profile.phoneNumber" class="form-control" maxlength="15"/>
-					</div>
-					<button ng-click="saveProfile(profileForm)" class="pull-right btn btn-primary" ng-disabled="loading">Update profile </button>
-				</form>	
-			</div>
-
+	<img class="spinner" src="/img/ajax-loader.gif" ng-show="loading"/>
+	<div class="row">
+		<div class="col-md-12">
+			<h3>Hello {{profile.displayName}}</h3>
 		</div>
-		<div class="profile-jobs">
-			<div class="job-table">
-				<table class="table">
-					<h1>Jobs's you've posted</h1>
-					<caption>Click Details to Update a Job</caption>
-					<thead>
-						<tr>
-							<th>#</th>
-							<th>Title</th>
-							<th>Description</th>
-							<th>Update</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr ng-repeat="job in jobs">
-							<th scope="row">{{$index + 1}}</th>
-							<td>{{job.title}}</td>
-							<td>{{job.description}}</td>
-							<td><a href="#/profile/job/{{job.websafeJobKey}}">Job Details</a></td>
-						</tr>
-	      			</tbody>
-	    		</table>
-    		</div>	
+		<div class="col-md-6">
+			<form name="profileForm" novalidate role="form">
+				<div class="form-group" ng-class="{'has-warning': profile.displayName != initialProfile.displayName}">
+					<label for="displayName">Display Name </label>
+					<span class="label label-warning" ng-show="profile.displayName != initialProfile.displayName"> Changed</span>
+					<input id="displayName" type="text" name="displayName" ng-model="profile.displayName" class="form-control" maxlength="30"/>
+				</div>
+				<div class="form-group" ng-class="{'has-warning': profile.city != initialProfile.city}">
+					<label for="city">City </label>
+					<span class="label label-warning" ng-show="profile.city != initialProfile.city"> Changed</span>
+					<input id="city" type="text" name="city" ng-model="profile.city" class="form-control" maxlength="30"/>
+				</div>
+				<div class="form-group" ng-class="{'has-warning': profile.state != initialProfile.state}">
+					<label for="state">State </label>
+					<span class="label label-warning" ng-show="profile.state != initialProfile.state"> Changed</span>
+					<input id="state" type="text" name="state" ng-model="profile.state" class="form-control" maxlength="30"/>
+				</div>
+				<div class="form-group" ng-class="{'has-warning': profile.phoneNumber != initialProfile.phoneNumber}">
+					<label for="phoneNumber">Phone Number </label>
+					<span class="label label-warning" ng-show="profile.phoneNumber != initialProfile.phoneNumber"> Changed</span>
+					<input id="phoneNumber" type="text" name="phoneNumber" ng-model="profile.phoneNumber" class="form-control" maxlength="15"/>
+				</div>
+				<button ng-click="saveProfile(profileForm)" class="pull-right btn btn-primary" ng-disabled="!isValidProfile(profileForm) || loading">Update profile </button>
+			</form>	
+		</div>
+		<div class="col-md-6">
+			<img ng-src="{{profile.pictureUrl}}" class=" img-responsive"/>	
+		</div>
+		<div class="col-md-12">
+			<div class="profile-jobs">
+				<div class="job-table">
+					<table class="table">
+						<h1>Jobs's you've posted</h1>
+						<caption>Click Details to Update a Job</caption>
+						<thead>
+							<tr>
+								<th>#</th>
+								<th>Title</th>
+								<th>Description</th>
+								<th>Update</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="job in jobs">
+								<th scope="row">{{$index + 1}}</th>
+								<td>{{job.title}}</td>
+								<td>{{job.description}}</td>
+								<td><a href="#/profile/job/{{job.websafeJobKey}}">Job Details</a></td>
+							</tr>
+		      			</tbody>
+		    		</table>
+	    		</div>	
 			</div> 
-    	</div>
+		</div>
 	</div>
 </div>

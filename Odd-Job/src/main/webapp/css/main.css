@@ -74,13 +74,6 @@ body{
 	background-color: red;
 }
 
-
-.profile-picture{
-	width: 45%;
-}
-.profile-information{
-	width: 45%;
-}
 .profile-jobs{
 	margin-top: 100px;
 }
@@ -92,10 +85,14 @@ body{
 	border-radius: 25px;
 }
 .job-table{
+	padding: 1%;
 	border-style: solid;
 	border-color: #ddd;
     border-width: 1px;
     border-radius: 4px 4px 0 0;
     -webkit-box-shadow: none;
     box-shadow: none;
+}
+.underline{
+	text-decoration: underline;
 }

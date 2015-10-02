@@ -161,6 +161,9 @@ oddjobApp.controllers.controller('ProfileCtrl', function($scope, $log,
 					});
 				});
 	};
+	$scope.isValidProfile = function(profile){
+		return !profileForm.$invalid;
+	}
 });
 /**
  * @ngdoc controller
@@ -518,20 +521,25 @@ oddjobApp.controllers.controller('ShowJobCtrl', function($scope, $log,
 	 * Variable that holds the column filter
 	 */
 	$scope.columnFilter = "postDate"
-		
+	$scope.currentFilter = "postDate"
+	
 	$scope.orderFilter = function(newFilter){
-		console.log('_' + $scope.columnFilter + '_, _' + newFilter + '_');
+		$scope.currentFilter = newFilter;
 		if(newFilter === $scope.columnFilter){
 			$scope.columnFilter = "-" + newFilter;
-			console.log("colFilter: " + $scope.columnFilter);
 		}
 		else{
-			console.log("newFilter: " + newFilter);
 			$scope.columnFilter = newFilter;
-			console.log("else: " + $scope.columnFilter);
 		}
-
 	}
+	
+	$scope.checkUnderline = function(tableHeader){
+		if(tableHeader === $scope.currentFilter){
+			return true;
+		}
+		return false;
+	}
+	
 	/**
 	 * Holds the status if the query is being executed.
 	 * 

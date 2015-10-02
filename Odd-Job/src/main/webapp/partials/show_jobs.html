@@ -27,12 +27,13 @@
 	  			</label>
 	  			<table id="job-table" class="table table-striped table-hover">
 		            <thead>
+		            
 		               <tr>
-		                   <th ng-click="orderFilter('postDate')">Post Time</th>
-		                   <th ng-click="orderFilter('title')">Title</th>
-		                   <th>Description</th>
-		                   <th ng-click="orderFilter('totalPay')">Total Pay</th>
-		                   <th ng-click="orderFilter('posterDisplayName')">Poster</th>
+		                   <th width="20%" ng-class = "{underline : checkUnderline('postDate')}" ng-click="orderFilter('postDate')">Post Time</th>
+		                   <th width="10%" ng-class = "{underline : checkUnderline('title')}" ng-click="orderFilter('title')">Title</th>
+		                   <th width="50%">Description</th>
+		                   <th width="10%" ng-class = "{underline : checkUnderline('totalPay')}" ng-click="orderFilter('totalPay')">Total Pay</th>
+		                   <th width="10%" ng-class = "{underline : checkUnderline('posterDisplayName')}" ng-click="orderFilter('posterDisplayName')">Poster</th>
 		               </tr>
 		             </thead>
 		             <tbody>
