@@ -30,7 +30,7 @@
 				<button ng-click="saveProfile(profileForm)" class="pull-right btn btn-primary" ng-disabled="!isValidProfile(profileForm) || loading">Update profile </button>
 			</form>	
 		</div>
-		<div class="col-md-6">
+		<div class="center-block col-md-6">
 			<img ng-src="{{profile.pictureUrl}}" class=" img-responsive"/>	
 		</div>
 		<div class="col-md-12" ng-show="submitted && jobs.length == 0">
