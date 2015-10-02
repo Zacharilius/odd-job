@@ -12,7 +12,7 @@
  *
  */
 var app = angular.module('oddjobApp',
-    ['odd-jobControllers', 'ngRoute', 'ui.bootstrap']).
+    ['odd-jobControllers', 'ngRoute', 'ui.bootstrap', 'ngAnimate']).
     config(['$routeProvider',
         function ($routeProvider) {
             $routeProvider.
