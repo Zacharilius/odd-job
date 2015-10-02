@@ -28,6 +28,7 @@ oddjobApp.controllers.controller('ProfileCtrl', function($scope, $log,
 	
 	$scope.receivedJobs = false;
 	$scope.loading = false;
+	$scope.submitted = false;
 	$scope.selectedTab == 'MAP';
 	
 	/*
@@ -84,6 +85,7 @@ oddjobApp.controllers.controller('ProfileCtrl', function($scope, $log,
 						
 						$scope.initialProfile = resp.result;
 					}
+					$scope.submitted = true;
 				});
 			});
 		};
@@ -174,7 +176,7 @@ oddjobApp.controllers.controller('ProfileCtrl', function($scope, $log,
 oddjobApp.controllers.controller('ProfileDetailCtrl', function($scope, $log, oauth2Provider,
 		$routeParams, HTTP_ERRORS) {
 	$scope.profile = {};
-
+	$scope.submitted = false;
 	$scope.isUserAttending = false;
 
 	/**
@@ -200,10 +202,12 @@ oddjobApp.controllers.controller('ProfileDetailCtrl', function($scope, $log, oau
 							$log.error($scope.messages);
 						} else {
 							// The request has succeeded.
+							$scope.submitted = true;
 							$scope.alertStatus = 'success';
 							console.log(resp.result);
 							$scope.profile = resp.result;
 						}
+						
 					});
 				});
 	};

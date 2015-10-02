@@ -9,19 +9,23 @@
             <img class="spinner" src="/img/ajax-loader.gif" ng-show="loading"/>
         </div>
     </div>
-    <div class="row" ng-init="init()">
+    <div ng-show="submitted && !profile.displayName">
+        <h3>No profile found</h3>
+    </div>
+    <div ng-show="submitted" class="row" ng-init="init()">
         <div class="col-md-6">
             <div class="well well-sm">
                 <h2>{{profile.displayName}}</h2>
-                <h5>{{profile.phoneNumber}}</h5>
-
-                <div>
-                    <label for="poster">profile Listing User: </label>
-                    <span id="poster">{{profile.posterDisplayName}}</span>
-                </div>
 	            <form class="form" novalidate role="form">
 	                <fieldset>
-	                    <div ng-show="profile.city">
+	                    <div ng-show="profile.phoneNumber">
+	                        <label for="phoneNumber">Phone Number: </label>
+	                        <span id="phoneNumber">{{profile.phoneNumber}}</span>
+	                    </div>	
+	                    <div ng-show="profile.mainEmail">
+	                        <label for="mainEmail">Email: </label>
+	                        <span id="mainEmail">{{profile.mainEmail}}</span>
+	                    </div>	    	                    <div ng-show="profile.city">
 	                        <label for="city">City: </label>
 	                        <span id="city">{{profile.city}}</span>
 	                    </div>

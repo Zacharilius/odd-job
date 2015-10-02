@@ -33,7 +33,10 @@
 		<div class="col-md-6">
 			<img ng-src="{{profile.pictureUrl}}" class=" img-responsive"/>	
 		</div>
-		<div class="col-md-12">
+		<div class="col-md-12" ng-show="submitted && jobs.length == 0">
+        		<h3>No matching results.</h3>
+   		 </div>		
+   		 <div ng-show="submitted && jobs.length > 0" class="col-md-12">
 			<div class="profile-jobs">
 				<div class="job-table">
 					<table class="table">
