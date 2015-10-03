@@ -8,6 +8,8 @@
 	<div ng-show="submitted && jobs.length == 0">
         <h3>No matching results.</h3>
     </div>
+    <h1>jobs.length: {{jobs.length}}</h1>
+    <h1>submitted: {{submitted}}</h1>
     <div ng-show="submitted && jobs.length > 0">  
 	    <tabset id="show-jobs" justified="true">
 	        <tab select="SearchByList()" heading="List"></tab>

@@ -514,7 +514,7 @@ oddjobApp.controllers.controller('JobCtrl', function($scope, $log,
  * @description A controller used for the Show job page.
  */
 oddjobApp.controllers.controller('ShowJobCtrl', function($scope, $log,
-		oauth2Provider, HTTP_ERRORS) {
+		oauth2Provider, HTTP_ERRORS, JobService) {
 
 	/**
 	 * Holds the jobs displayed on the page
@@ -575,36 +575,12 @@ oddjobApp.controllers.controller('ShowJobCtrl', function($scope, $log,
 	$scope.map = new google.maps.Map(mapCanvas, mapOptions);
 	$scope.markers = [];
 
-	var createMarker = function(job) {
-
-		var marker = new google.maps.Marker({
-			map : $scope.map,
-			position : new google.maps.LatLng(job.latitude, job.longitude),
-			title : job.title
-		});
-		marker.content = '<div class="infoWindowContent">' + job.description
-				+ '</div>';
-
-		google.maps.event.addListener(marker, 'click', function() {
-			infoWindow.setContent('<h2>' + job.title + '</h2>'
-					+ job.description);
-			infoWindow.open($scope.map, marker);
-		});
-
-		$scope.markers.push(marker);
-
-	}
+	
 	$scope.openInfoWindow = function(e, selectedMarker) {
 		e.preventDefault();
 		google.maps.event.trigger(selectedMarker, 'click');
 	}
 
-	/**
-	 * Holds the job currently displayed in the page.
-	 * 
-	 * @type {Array}
-	 */
-	$scope.job = [];
 
 	/**
 	 * Sets the selected tab to 'MAP'
@@ -634,7 +610,6 @@ oddjobApp.controllers.controller('ShowJobCtrl', function($scope, $log,
 	 * @returns {number}
 	 */
 	$scope.pagination.numberOfPages = function() {
-		return Math.ceil($scope.jobs.length / $scope.pagination.pageSize);
 	};
 
 	/**
@@ -669,45 +644,21 @@ oddjobApp.controllers.controller('ShowJobCtrl', function($scope, $log,
 	 * 
 	 */
 	$scope.queryJobs = function() {
+		$scope.loading = true;
 		$scope.submitted = false;
 		if ($scope.selectedTab == 'MAP') {
-			$scope.queryAllJobs();
+			$scope.jobs = JobService.queryAllJobs();
 		} else if ($scope.selectedTab == 'LIST') {
-			$scope.queryAllJobs();
+			var jobPromise = JobService.queryAllJobs();
+			jobPromise.then(function(data){
+				console.log(data);
+				$scope.jobs = data;
+			});
 		}
+		$scope.submitted = true;
+		$scope.loading = false;
 	};
 
-	/**
-	 * Invokes the oddjob.queryoddjobs API.
-	 */
-	$scope.queryAllJobs = function() {
-		$scope.loading = true;
-		gapi.client.oddjob.getAllJobsCreated().execute(function(resp) {
-			$scope.$apply(function() {
-				$scope.loading = false;
-				if (resp.error) {
-					// The request has failed.
-					var errorMessage = resp.error.message || '';
-					$scope.messages = 'Failed to query jobs : ' + errorMessage;
-					$scope.alertStatus = 'warning';
-				} else {
-					// The request has succeeded.
-					$scope.messages = 'Query succeeded : ';
-					$scope.alertStatus = 'success';
-					$log.info($scope.messages);
-					console.log(resp.items);
-					$scope.jobs = [];
-					$scope.markers = [];
-					angular.forEach(resp.items, function(job) {
-						job.totalPay = job.pay * job.hours;
-						$scope.jobs.push(job);
-						createMarker(job);
-					});
-				}
-				$scope.submitted = true;
-			});
-		});
-	}
 });
 
 /**

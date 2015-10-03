@@ -97,14 +97,46 @@ app.constant('formInformation',{
 /**
  * 
  */
-app.service('jobProvider', function(){
+app.service('JobService', function(){
+	/**
+	 * Creates a google maps marker.
+	 */
+
+	
+	/**
+	 * Invokes the oddjob.queryoddjobs API.
+	 */
+	this.queryAllJobs = function() {
+		gapi.client.oddjob.getAllJobsCreated().execute(function(resp) {
+				if (resp.error) {
+					// The request has failed.
+					var errorMessage = resp.error.message || '';
+					var messages = 'Failed to query jobs : ' + errorMessage;
+					var alertStatus = 'warning';
+					console.log("ERROR");
+				} else {
+					// The request has succeeded.
+					var messages = 'Query succeeded : ';
+					var alertStatus = 'success';
+					console.log("Success");
+					console.log(resp.items);
+					return resp.items;
+				}
+		});
+	}	
+});
+/**
+ * 
+ */
+app.service('ProfileService', function(){
 	
 });
+
 
 /**
  * 
  */
-app.service('mapProvider', function(){
+app.service('MapService', function(){
 	
 });
 
